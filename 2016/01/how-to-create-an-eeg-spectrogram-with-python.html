@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      How to Create an EEG Spectrogram with Python &middot; Andy Fiedler
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/hyde.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha256-3dkvEK0WLHRJ7/Csr0BZjAWxERc5WH7bdeUya2aXxdU= sha512-+L4yy6FRcDGbXJ9mPG8MT/3UCDzwR9gPeyFNMCtInsol++5m3bk2bXWKdZjvybmohrAsn3Ua5x8gfLnbE1YkOg==" crossorigin="anonymous">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+
+  <!-- JS -->
+  <script>
+    // Picture element HTML5 shiv
+    document.createElement( "picture" );
+  </script>
+  <script async src="/public/js/picturefill.min.js"></script>
+</head>
+
+
+  <body>
+
+    <div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <h1>
+        <a href="/">
+          Andy Fiedler
+        </a>
+      </h1>
+      <p class="lead"></p>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a class="sidebar-nav-item" href="/">Home</a>
+
+      
+
+      
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+            
+              <a class="sidebar-nav-item" href="/projects/">Projects</a>
+            
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+
+    </nav>
+
+    <div class="sidebar-footer">
+      <p>&copy; 2016 <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC</a>.</p>
+    </div>
+  </div>
+</div>
+
+
+    <div class="content container">
+      <div class="post">
+  <h1 class="post-title">How to Create an EEG Spectrogram with Python</h1>
+  <span class="post-date">04 Jan 2016</span>
+  <p>I recently got a <a href="http://www.amazon.com/NeuroSky-MindWave-Mobile-BrainWave-Starter/dp/B00B8BF4EM/ref=pd_sim_23_2?ie=UTF8&amp;dpID=41o3rl5m2dL&amp;dpSrc=sims&amp;preST=_AC_UL160_SR160%2C160_&amp;refRID=0VGRK15RHHK9ZTE37448">Neurosky Mindwave</a>, which measures EEG waves and sends them via Bluetooth to your computer or phone.</p>
+
+<p>Busting out some of my rusty signal processing from college, I made a spectrogram from the EEG. Check it out!</p>
+
+<picture>
+    <source srcset="/generated/wp/uploads/2016/01/eeg-731by281-601798.png" media="(min-width: 40em) and (-webkit-min-device-pixel-ratio: 1.5), (min-width: 40em) and (min-resolution: 144dpi)" />
+    <source srcset="/generated/wp/uploads/2016/01/eeg-700by269-601798.png" media="(min-width: 40em)" />
+    <source srcset="/generated/wp/uploads/2016/01/eeg-675by259-601798.png" media="(min-width: 30em) and (-webkit-min-device-pixel-ratio: 1.5), (min-width: 30em) and (min-resolution: 144dpi)" />
+    <source srcset="/generated/wp/uploads/2016/01/eeg-450by173-601798.png" media="(min-width: 30em)" />
+    <source srcset="/generated/wp/uploads/2016/01/eeg-492by281-601798.png" media="(-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 144dpi)" />
+    <source srcset="/generated/wp/uploads/2016/01/eeg-350by200-601798.png" />
+    <img src="/generated/wp/uploads/2016/01/eeg-350by200-601798.png" class="blog-full" itemprop="image" />
+  </picture>
+
+<p>To check out how I made this, see this <a href="https://gist.github.com/afiedler/6e498d2981ea7b788b61">IPython notebook</a>. This is using Jupyter and Python 3, with data recorded using <a href="https://github.com/afiedler/node-thinkgear-sockets">node-thinkgear-sockets</a>.</p>
+
+</div>
+
+<div class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/2016/04/a-better-patch-method-for-angulars-ngresource">
+            A Better $patch Method for Angular's ngResource
+            <small>16 Apr 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2016/04/testing-angular-q-promises">
+            Testing Angular $q Promises
+            <small>12 Apr 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2016/03/using-jupyter-for-exploring-a-heroku-database">
+            Using Jupyter for Exploring a Heroku Database
+            <small>25 Mar 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+    </div>
+
+    
+  </body>
+</html>

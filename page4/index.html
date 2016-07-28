@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Andy Fiedler &middot; 
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/hyde.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha256-3dkvEK0WLHRJ7/Csr0BZjAWxERc5WH7bdeUya2aXxdU= sha512-+L4yy6FRcDGbXJ9mPG8MT/3UCDzwR9gPeyFNMCtInsol++5m3bk2bXWKdZjvybmohrAsn3Ua5x8gfLnbE1YkOg==" crossorigin="anonymous">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+
+  <!-- JS -->
+  <script>
+    // Picture element HTML5 shiv
+    document.createElement( "picture" );
+  </script>
+  <script async src="/public/js/picturefill.min.js"></script>
+</head>
+
+
+  <body>
+
+    <div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <h1>
+        <a href="/">
+          Andy Fiedler
+        </a>
+      </h1>
+      <p class="lead"></p>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a class="sidebar-nav-item" href="/">Home</a>
+
+      
+
+      
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+            
+              <a class="sidebar-nav-item" href="/projects/">Projects</a>
+            
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+
+    </nav>
+
+    <div class="sidebar-footer">
+      <p>&copy; 2016 <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC</a>.</p>
+    </div>
+  </div>
+</div>
+
+
+    <div class="content container">
+      <div class="posts">
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/2015/07/2015-state-of-devops-pwc-and-puppet-labs-report">
+        2015 State of DevOps - PwC and Puppet Labs Report
+      </a>
+    </h1>
+
+    <span class="post-date">22 Jul 2015</span>
+
+    <p><a href="https://puppetlabs.com/sites/default/files/2015-state-of-devops-report.pdf">This is a really interesting report on how to have high performing dev teams</a>.</p>
+
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/2015/07/fixing-syntaxhighlighter-evolved-font-size">
+        Fixing SyntaxHighlighter Evolved Font Size
+      </a>
+    </h1>
+
+    <span class="post-date">22 Jul 2015</span>
+
+    <p><a href="https://wordpress.org/plugins/syntaxhighlighter/">SyntaxHighlighter Evolved</a> is currently the plugin I use for syntax highlighting on this site. It uses the default text size for code blocks, which doesn’t look great since code is in a fixed-width font. To fix that, add a class to the code blocks called <code class="highlighter-rouge">code-blk</code> in <strong>Settings &gt; SyntaxHighlighter</strong>. Then modify your theme’s CSS (or use the Wordpress Jetpack Custom CSS feature) to add CSS like this:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nc">.code-blk</span> <span class="p">{</span>
+   <span class="nl">font-size</span><span class="p">:</span> <span class="m">10pt</span> <span class="cp">!important</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p>Thanks to <a href="http://matthewturland.com/2012/02/13/wordpress-syntaxhighlighter-font-size-fix/">this post</a> for the inspiration.</p>
+
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/2015/07/gotchas-with-hapis-code-library">
+        Gotchas with Hapi's Code Library
+      </a>
+    </h1>
+
+    <span class="post-date">22 Jul 2015</span>
+
+    <p>Overall, I’ve had a good experience with HapiJS and Code, Hapi’s assertion library. There was one gotcha with Code’s <code class="highlighter-rouge">deep.equal</code> function. If you are comparing two objects that have identical non-function properties, but different function properties, <code class="highlighter-rouge">deep.equal</code> will fail. So, for example, if you compare a Hapi response to a Plain Old Javascript Object fixture, you will get an exception.</p>
+
+<p>The solution is to strip the non-function properties before comparing:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// response - an object with some function properties</span>
+<span class="c1">// fixture - a Plain Old Javascript Object</span>
+<span class="kd">var</span> <span class="nx">responsePojo</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">response</span><span class="p">));</span>
+
+<span class="nx">expect</span><span class="p">(</span><span class="nx">responsePojo</span><span class="p">).</span><span class="nx">to</span><span class="p">.</span><span class="nx">deep</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="nx">fixture</span><span class="p">);</span>
+</code></pre>
+</div>
+
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/2015/07/nodejs-and-hapi-for-rails-developers">
+        NodeJS and Hapi for Rails Developers
+      </a>
+    </h1>
+
+    <span class="post-date">22 Jul 2015</span>
+
+    <p>This post is an <strong>work in progress</strong> list of tips and tricks I’ve learned working on a HapiJS API after mostly coding Rails APIs for the last few years. I expect to update it as I learn more.</p>
+
+<p>If you are a Rails developer looking to transition to NodeJS, hopefully this will save you some time. If you are a more seasoned NodeJS or Hapi developer and have suggestions for improving this, please let me know in the comments.</p>
+
+<h2 id="async-programming">Async Programming</h2>
+
+<h3 id="error-first-callbacks-promises-or-asyncawait">Error-first callbacks, promises, or <code class="highlighter-rouge">async</code>/<code class="highlighter-rouge">await</code></h3>
+<p>Most Rails developers have written some Javascript, so you are probably familiar with callbacks. On the client, having nested callbacks is relatively rare. On the server, however, they are far more common. A simple example would be a server method that needs to make a handful of database calls, with all of the depending on the outcome of the others. This would be trivial to write in a sequential way, but with NodeJS, you will need to nest callbacks to accomplish the same thing.</p>
+
+<p>This is both the best thing about NodeJS and the most annoying. It makes things very performant, because with callbacks you continually return control to the main event loop, freeing the main thread to move on to other things. In Rails, unless you are using a threaded server like Puma, waiting on a database call will block the entire process.</p>
+
+<p>All of Node core and most of the libraries use error-first callbacks. If the first argument to the callback function is truthy, then you know the callback has failed with an error. You’ll see a lot of code in NodeJS like this:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">myCallbackFunction</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">result</span><span class="p">)</span> <span class="p">{</span>
+   <span class="k">if</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="k">return</span> <span class="nx">err</span><span class="p">;</span>
+   <span class="c1">// process the result</span>
+<span class="p">});</span>
+</code></pre>
+</div>
+
+<p>This gets nasty when you have many nested callbacks and has been dubbed “callback hell”.</p>
+
+<p>One way to fix this is to use a promise. You can typically turn any error-first callback function into a promise-returning function with <code class="highlighter-rouge">Promise.promisify()</code>.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">Promise</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'bluebird'</span><span class="p">);</span> <span class="c1">// bluebird is a popular promise library</span>
+<span class="kd">var</span> <span class="nx">myAsyncFunction</span> <span class="o">=</span> <span class="nx">Promise</span><span class="p">.</span><span class="nx">promisify</span><span class="p">(</span><span class="nx">myCallbackFunction</span><span class="p">);</span>
+
+<span class="nx">myAsyncFunction</span><span class="p">(</span><span class="nx">options</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">result</span><span class="p">)</span> <span class="p">{</span>
+   <span class="c1">// process result</span>
+<span class="p">}).</span><span class="k">catch</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+   <span class="c1">// process error</span>
+<span class="p">});</span>
+</code></pre>
+</div>
+
+<p>This doesn’t look Earth-shattering, but promises can make deeply nested callbacks more readable. I like promises from my AngularJS programming, but they aren’t widely used in the Node community. If you attempt to use them, you feel like you are fighting an uphill battle since everyone still uses error-first callbacks. They can be vital in some situations, however.</p>
+
+<h4 id="es7-and-asyncawait">ES7 and <code class="highlighter-rouge">async</code>/<code class="highlighter-rouge">await</code></h4>
+<p>The next generation of Javascript will hopefully solve all of our problems with the addition of two new keywords: <code class="highlighter-rouge">async</code> and <code class="highlighter-rouge">await</code>. These use promises under the hood, but you can use <code class="highlighter-rouge">try</code>-<code class="highlighter-rouge">catch</code> and don’t need <code class="highlighter-rouge">then()</code>:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">try</span> <span class="p">{</span>
+   <span class="kd">var</span> <span class="nx">result</span> <span class="o">=</span> <span class="nx">await</span> <span class="nx">myAsyncFunction</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span>
+   <span class="c1">// process result</span>
+<span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">ex</span><span class="p">)</span> <span class="p">{</span>
+   <span class="c1">// handle error</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p>You can use this today if you transpile with the Traceur compiler, but not much of the Node community is doing that yet. Once more people get on board, this will be a <em>huge</em> improvement in Javascript.</p>
+
+<h4 id="what-do-do-today">What do do today?</h4>
+<p>Today, I think you should stick with error-first callbacks and use promises if absolutely necessary. Another library you can look into is the <a href="https://github.com/caolan/async"><code class="highlighter-rouge">async</code></a> library, which gives you lots of nice functions to handle many callbacks in series or parallel.</p>
+
+<h2 id="unit-testing">Unit Testing</h2>
+
+<h3 id="npm-packages-to-use">NPM packages to use</h3>
+<ul>
+  <li><a href="https://github.com/hapijs/lab">Lab</a> - Hapi’s unit testing framework. It supports both TestUnit and RSpec style tests. I’m using the RSpec style.</li>
+  <li><a href="https://github.com/hapijs/code">Code</a> - An assertion library. This handles <code class="highlighter-rouge">expect</code> statements. There are a <a href="http://andyfiedler.com/blog/gotchas-with-hapis-code-library-327/">few gotchas</a>.</li>
+</ul>
+
+<h3 id="test-folder-setup">Test folder setup</h3>
+<p>I’m using RSpec style tests, so my folder hierarchy looks like this:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>+ /
+|
++---specs
+|
++---requests
+| |
+| +---users
+| |
+| +---get.js
+|
++---models
+|
++---user.js
+</code></pre>
+</div>
+
+<h3 id="running-your-specs">Running your specs</h3>
+<p>To run your specs, you have two choices. You can either install lab globally and run them with the <code class="highlighter-rouge">lab</code> command, or you can change your <code class="highlighter-rouge">package.json</code> file to set what to run for <code class="highlighter-rouge">npm test</code>. I usually do the second options, because it lets me specify some default options for lab. Here’s what the section of <code class="highlighter-rouge">package.json</code> file looks like:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
+   </span><span class="nt">"scripts"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"test"</span><span class="p">:</span><span class="w"> </span><span class="s2">"env $(cat .env | xargs) lab -v -L -m 0"</span><span class="w">
+   </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+</div>
+
+<p>The <code class="highlighter-rouge">xargs</code> part is to set the environmental variables before running the tests from the <code class="highlighter-rouge">.env</code> file. There probably is a better way to do this, but that is working for now.</p>
+
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/2015/07/getting-node-inspector-to-work-with-labhapijs">
+        Getting Node-Inspector to work with Lab&#47;HapiJS
+      </a>
+    </h1>
+
+    <span class="post-date">17 Jul 2015</span>
+
+    <p>Debugging specs with console.log statements is a real pain. Node-Inspector is far better, giving you an environment that is basically the same as Chrome DevTools.</p>
+
+<p>To use it with Lab, add this script to your package.json file:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="p">{</span>
+  <span class="c1">// other package.json stuff</span>
+  <span class="s2">"scripts"</span><span class="err">:</span> <span class="p">{</span>
+    <span class="s2">"test-debug"</span><span class="err">:</span> <span class="s2">"node-debug ./node_modules/.bin/lab"</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p>You can now run all of your specs with <code class="highlighter-rouge">npm run test-debug</code> , or run the specs in just one file with <code class="highlighter-rouge">npm run test-debug &lt;path to your spec file&gt;.js</code>.</p>
+
+  </div>
+  
+</div>
+
+<div class="pagination">
+  
+    <a class="pagination-item older" href="/page5">Older</a>
+  
+  
+    
+      <a class="pagination-item newer" href="/page3">Newer</a>
+    
+  
+</div>
+    </div>
+
+    
+  </body>
+</html>

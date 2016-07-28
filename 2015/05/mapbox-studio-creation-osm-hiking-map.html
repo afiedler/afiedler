@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Mapbox Studio Creation - OSM Hiking Map &middot; Andy Fiedler
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/hyde.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha256-3dkvEK0WLHRJ7/Csr0BZjAWxERc5WH7bdeUya2aXxdU= sha512-+L4yy6FRcDGbXJ9mPG8MT/3UCDzwR9gPeyFNMCtInsol++5m3bk2bXWKdZjvybmohrAsn3Ua5x8gfLnbE1YkOg==" crossorigin="anonymous">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+
+  <!-- JS -->
+  <script>
+    // Picture element HTML5 shiv
+    document.createElement( "picture" );
+  </script>
+  <script async src="/public/js/picturefill.min.js"></script>
+</head>
+
+
+  <body>
+
+    <div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <h1>
+        <a href="/">
+          Andy Fiedler
+        </a>
+      </h1>
+      <p class="lead"></p>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a class="sidebar-nav-item" href="/">Home</a>
+
+      
+
+      
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+            
+              <a class="sidebar-nav-item" href="/projects/">Projects</a>
+            
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+
+    </nav>
+
+    <div class="sidebar-footer">
+      <p>&copy; 2016 <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC</a>.</p>
+    </div>
+  </div>
+</div>
+
+
+    <div class="content container">
+      <div class="post">
+  <h1 class="post-title">Mapbox Studio Creation - OSM Hiking Map</h1>
+  <span class="post-date">13 May 2015</span>
+  <p>I’ve been experimenting with <a title="Mapbox Studio" href="https://www.mapbox.com/mapbox-studio" target="_blank">Mapbox Studio</a>, which is an awesome way to create maps without the pain of setting up a server or downloading Open Street Map data.</p>
+
+<p>The way Mapbox Studio works is that Mapbox has pre-rendered vector tiles from Open Street Map at all 22 standard zoom levels. Mapbox has also pre-rendered hill shading tiles and contour lines! You just need to style them with CartoCSS, which is as easy as it sounds (if you know CSS).</p>
+
+<p>They have a bunch of great starter styles, one of which is Mapbox Outdoors. I modified that to make it a little better for hiking by adjusting the trail labels and making trails more prominent.</p>
+
+<p>You can get the <a title="Hiking Map CartoCSS" href="https://github.com/afiedler/hiking-map.tm2" target="_blank">CartoCSS for the hiking map here</a> and see a <a title="Hiking Map Demo" href="https://api.tiles.mapbox.com/v4/afiedler.e83d82a2/page.html?access_token=pk.eyJ1IjoiYWZpZWRsZXIiLCJhIjoiN2c5VFFRSSJ9.45nCmyDqG5vpSOuHnCj0qQ#15/38.9863/-77.2362" target="_blank">demo of the hiking map here</a>.</p>
+
+<p>Here’s Great Falls, Maryland with my changes.</p>
+
+<picture>
+    <source srcset="/generated/wp/uploads/2015/05/great-falls-1050by1145-3fab46.png" media="(min-width: 40em) and (-webkit-min-device-pixel-ratio: 1.5), (min-width: 40em) and (min-resolution: 144dpi)" />
+    <source srcset="/generated/wp/uploads/2015/05/great-falls-700by764-3fab46.png" media="(min-width: 40em)" />
+    <source srcset="/generated/wp/uploads/2015/05/great-falls-675by736-3fab46.png" media="(min-width: 30em) and (-webkit-min-device-pixel-ratio: 1.5), (min-width: 30em) and (min-resolution: 144dpi)" />
+    <source srcset="/generated/wp/uploads/2015/05/great-falls-450by491-3fab46.png" media="(min-width: 30em)" />
+    <source srcset="/generated/wp/uploads/2015/05/great-falls-525by300-3fab46.png" media="(-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 144dpi)" />
+    <source srcset="/generated/wp/uploads/2015/05/great-falls-350by200-3fab46.png" />
+    <img src="/generated/wp/uploads/2015/05/great-falls-350by200-3fab46.png" class="blog-full" itemprop="image" />
+  </picture>
+
+
+</div>
+
+<div class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/2016/04/a-better-patch-method-for-angulars-ngresource">
+            A Better $patch Method for Angular's ngResource
+            <small>16 Apr 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2016/04/testing-angular-q-promises">
+            Testing Angular $q Promises
+            <small>12 Apr 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2016/03/using-jupyter-for-exploring-a-heroku-database">
+            Using Jupyter for Exploring a Heroku Database
+            <small>25 Mar 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+    </div>
+
+    
+  </body>
+</html>
