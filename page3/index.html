@@ -182,6 +182,10 @@
           
         
       
+        
+          
+        
+      
 
     </nav>
 
@@ -194,6 +198,43 @@
 
     <div class="content container">
       <div class="posts">
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/2015/12/the-sketch-file-format">
+        How to Parse Sketch Files with NodeJS
+      </a>
+    </h1>
+
+    <span class="post-date">11 Dec 2015</span>
+
+    <p>I’ve recently been working more with <a href="https://www.sketchapp.com/">Sketch</a>, and wanted to see if I could get Sketch files to render on Linux. Turns out that no one has released open-source software to parse or open Sketch files yet, so I decided to see how hard it would be to parse them with NodeJS.</p>
+
+<p>Here’s the results of my efforts: <a href="https://github.com/afiedler/sketch-node-parser">Github Project</a></p>
+
+<p>This needs more work to make it usable, but Sketch files aren’t too difficult to deal with.</p>
+
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/2015/12/two-resources-to-learn-about-copywriting">
+        Two Resources to Learn About Copywriting
+      </a>
+    </h1>
+
+    <span class="post-date">07 Dec 2015</span>
+
+    <ol>
+  <li>
+    <p>The <a href="https://www.google.com/design/spec/style/writing.html">Google Material Design Guidelines for Writing</a>. The whole Material Design style guide is a good read to learn about UX, but the writing section is excellent to learn about writing clear, concise copy for user interface.</p>
+  </li>
+  <li>
+    <p><a href="http://www.canadaone.com/ezine/feb02/advertising_copy.html">Key Questions to Ask Before Writing &amp; Before Testing Advertising Copy</a>. This article has an excellent description of the difference between inductive and deductive writing strategies. When technical experts write, they typically do so in a deductive way, leading the reader through a logic argument that culminates in the conclusion. That might not work well for advertising copy, and this article explains why.</p>
+  </li>
+</ol>
+
+  </div>
   
   <div class="post">
     <h1 class="post-title">
@@ -542,73 +583,6 @@
 </div>
 
 <p>Make sure you run this script from a folder within your app (with the Heroku git remote correctly set up). It will put the schema in schema.sql in the current working directory.</p>
-
-  </div>
-  
-  <div class="post">
-    <h1 class="post-title">
-      <a href="/2015/08/friday-links">
-        Friday Links
-      </a>
-    </h1>
-
-    <span class="post-date">07 Aug 2015</span>
-
-    <ul>
-  <li><strong>Music I’m rocking out to</strong> – <a href="https://open.spotify.com/track/5dCQryKQ6LPT50PBXnZfQy">Two Hearts</a> by The Features and <a href="https://open.spotify.com/track/2sNvitW3TxiTeC9xT9f2ZZ">Firestone</a> by Kygo.</li>
-  <li><strong>Interesting read</strong> – The NYTimes has a <a href="http://www.nytimes.com/2015/08/08/us/politics/fox-news-moderators-bring-a-sharpened-edge-to-gop-debate-stage.html?_r=0">great article</a> praising the Fox News coverage of the Republican debate. I agree with it, the Fox moderators were almost Jon Stewart-esque!</li>
-  <li><strong>Tools and tech</strong> – I’ve been experimenting with different development environments for NodeJS, and the winner so far is JetBrain’s <a href="https://www.jetbrains.com/webstorm/">WebStorm</a>. Code completion support is excellent, and the integrated Node debugger is a huge time saver. At $49, it’s a no-brainer if you do any kind of Javascript development.</li>
-</ul>
-
-  </div>
-  
-  <div class="post">
-    <h1 class="post-title">
-      <a href="/2015/07/google-analytics-with-angularjs-and-ui-router">
-        Google Analytics with AngularJS and UI-Router
-      </a>
-    </h1>
-
-    <span class="post-date">29 Jul 2015</span>
-
-    <p>I helped <a href="http://www.cleanslatedc.com/">Clean Slate DC</a> add Google Analytics to their app last night at <a href="http://codefordc.org">Code For DC</a> and realized others might not know how to do this. It’s pretty simple, but you won’t want to follow the directions on Google Analytics exactly. Instead, add this to your <code class="highlighter-rouge">index.html</code> or main page <code class="highlighter-rouge">&lt;head&gt;</code>, replacing your UA code with the UA code that Google gives you:</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c">&lt;!-- Google Analytics --&gt;</span>
-<span class="nt">&lt;script&gt;</span>
-<span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span><span class="nx">s</span><span class="p">,</span><span class="nx">o</span><span class="p">,</span><span class="nx">g</span><span class="p">,</span><span class="nx">r</span><span class="p">,</span><span class="nx">a</span><span class="p">,</span><span class="nx">m</span><span class="p">){</span><span class="nx">i</span><span class="p">[</span><span class="s1">'GoogleAnalyticsObject'</span><span class="p">]</span><span class="o">=</span><span class="nx">r</span><span class="p">;</span><span class="nx">i</span><span class="p">[</span><span class="nx">r</span><span class="p">]</span><span class="o">=</span><span class="nx">i</span><span class="p">[</span><span class="nx">r</span><span class="p">]</span><span class="o">||</span><span class="kd">function</span><span class="p">(){</span>
-<span class="p">(</span><span class="nx">i</span><span class="p">[</span><span class="nx">r</span><span class="p">].</span><span class="nx">q</span><span class="o">=</span><span class="nx">i</span><span class="p">[</span><span class="nx">r</span><span class="p">].</span><span class="nx">q</span><span class="o">||</span><span class="p">[]).</span><span class="nx">push</span><span class="p">(</span><span class="nx">arguments</span><span class="p">)},</span><span class="nx">i</span><span class="p">[</span><span class="nx">r</span><span class="p">].</span><span class="nx">l</span><span class="o">=</span><span class="mi">1</span><span class="o">*</span><span class="k">new</span> <span class="nb">Date</span><span class="p">();</span><span class="nx">a</span><span class="o">=</span><span class="nx">s</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="nx">o</span><span class="p">),</span>
-<span class="nx">m</span><span class="o">=</span><span class="nx">s</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="nx">o</span><span class="p">)[</span><span class="mi">0</span><span class="p">];</span><span class="nx">a</span><span class="p">.</span><span class="nx">async</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="nx">a</span><span class="p">.</span><span class="nx">src</span><span class="o">=</span><span class="nx">g</span><span class="p">;</span><span class="nx">m</span><span class="p">.</span><span class="nx">parentNode</span><span class="p">.</span><span class="nx">insertBefore</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="nx">m</span><span class="p">)</span>
-<span class="p">})(</span><span class="nb">window</span><span class="p">,</span><span class="nb">document</span><span class="p">,</span><span class="s1">'script'</span><span class="p">,</span><span class="s1">'//www.google-analytics.com/analytics.js'</span><span class="p">,</span><span class="s1">'ga'</span><span class="p">);</span>
-<span class="nx">ga</span><span class="p">(</span><span class="s1">'create'</span><span class="p">,</span> <span class="s1">'UA-XXXX-X'</span><span class="p">,</span> <span class="s1">'auto'</span><span class="p">);</span>
-<span class="nt">&lt;/script&gt;</span>
-<span class="c">&lt;!-- End Google Analytics --&gt;</span>
-</code></pre>
-</div>
-
-<p>Next, add a service to your Angular project:</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s2">"app"</span><span class="p">).</span><span class="nx">service</span><span class="p">(</span><span class="s1">'Analytics'</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-
-  <span class="k">this</span><span class="p">.</span><span class="nx">recordPageview</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">url</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">ga</span><span class="p">(</span><span class="s1">'set'</span><span class="p">,</span> <span class="s1">'page'</span><span class="p">,</span> <span class="nx">url</span><span class="p">);</span>
-    <span class="nx">ga</span><span class="p">(</span><span class="s1">'send'</span><span class="p">,</span> <span class="s1">'pageview'</span><span class="p">);</span>
-  <span class="p">};</span>
-
-<span class="p">});</span>
-</code></pre>
-</div>
-
-<p>Finally, add a run block near where your app starts:</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s2">"app"</span><span class="p">).</span><span class="nx">run</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">$rootScope</span><span class="p">,</span> <span class="nx">$location</span><span class="p">,</span> <span class="nx">Analytics</span><span class="p">)</span> <span class="p">{</span>
-  <span class="nx">$rootScope</span><span class="p">.</span><span class="nx">$on</span><span class="p">(</span><span class="s1">'$stateChangeSuccess'</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-    <span class="nx">Analytics</span><span class="p">.</span><span class="nx">recordPageview</span><span class="p">(</span><span class="nx">$location</span><span class="p">.</span><span class="nx">url</span><span class="p">());</span>
-  <span class="p">});</span>
-<span class="p">});</span>
-</code></pre>
-</div>
-
-<p>There you go!</p>
 
   </div>
   

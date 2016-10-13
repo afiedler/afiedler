@@ -182,6 +182,10 @@
           
         
       
+        
+          
+        
+      
 
     </nav>
 
@@ -194,6 +198,77 @@
 
     <div class="content container">
       <div class="posts">
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/2014/05/the-ultimate-guide-to-dealing-with-high-frequency-data">
+        The Ultimate Guide to Dealing with High Frequency Data
+      </a>
+    </h1>
+
+    <span class="post-date">07 May 2014</span>
+
+    <p>I have no idea if this is actually the ultimate guide to high frequency data, but hopefully it is at least a useful guide!</p>
+
+<p>I’m currently working on a project to replace the <a title="Time Series Database" href="http://andyfiedler.com/projects/time-series-database/">Time Series Database</a> (TSDB) that I wrote a few years ago. By re-writing it, I’m learning a lot about what works and what doesn’t when dealing with high frequency data. High frequency in this case means billions of records, with timestamp precision down to the millisecond. This data is being used for economic research and analytics, not live trading. It is a pain to deal with because it is simply too large to fit in memory or process with a standard relational database. These are some rules that I’ve developed while working on this project.</p>
+<h2>Partition your data!</h2>
+<p>The biggest issue with this much time series data is that you simply cannot index the timestamp column with any normal indexing scheme. In DB-speak, the timestamp column will be a <a title="Cardinality (Wikipedia)" href="http://en.wikipedia.org/wiki/Cardinality_(SQL_statements)" target="_blank">“high cardinality”</a> column, which means it does not lend itself well to indexing. This is a problem because most queries on this kind of high frequency data are to fetch a subset by timestamp, and you do NOT want to make a table scan of a billion plus records to find a few minutes of data.</p>
+
+<p>TSDB attempts to fix this problem by keeping rows in order and creating a <a title="Dense versus Sparse Indexes" href="http://www.cs.sfu.ca/CourseCentral/354/zaiane/material/notes/Chapter11/node5.html" target="_blank">sparse index</a> (an index on every 20,000 rows). This should work in theory, but you must ensure that your rows are always sequential. That makes inserting or updating difficult, because you potentially need to shift rows to maintain the order. Also, I’m not aware of a relational database that lets you create a sparse index, which rules out the most common and best understood data stores.</p>
+
+<p>Another approach is to <em>partition</em> your data. This is my current approach. The way this works is you simply create multiple tables for set time periods (one table per day or month is a good starting point). You then put records that match those time periods in their respective tables and write some logic to union queries across tables.</p>
+
+<p>Partitioning enables the database to hunt through a subset of rows to find the ones that match your query. Both Postgres and MySQL support partitioning, making them viable options for storing time series data. The library that I’m working on will use <a title="PyTables" href="http://pytables.github.io" target="_blank">PyTables</a> to partition time series data by date.</p>
+<h2>Store timestamps in UTC</h2>
+<p>Most of the time, your source data will have timestamps in UTC. If it doesn’t, I suggest you convert to UTC before storing. Most libraries use either UTC or local time internally, and because you can never be sure what time zone your users will be in, using UTC is the least common denominator.</p>
+
+<p>UTC also has the nice property of not having daylight saving time changes. DST causes all sorts of pain when working with 24/7 data. Avoid it by just dealing in UTC internally, and then converting to other timezones for querying or display.</p>
+<h2>Store timestamps as integers, even if your programming language uses floats</h2>
+<p>MATLAB, Excel, and R all store timestamps internally as floats by default. This gives their timestamp types a large range and high precision, but I don’t think it is appropriate for archiving time series data. Why? Floats are imprecise. You do not know with any accuracy the number of significant digits when using a float, and you cannot make comparisons without worrying about round off errors. Admittedly, even with microsecond data, these systems that use a 64-bit double and 1970-01-01 as the epoch will not loose precision until <span style="color: #000000;">2242-03-16, but why worry about it? I recommend a 64-bit integer as the timestamp column. With one tick equaling one millisecond, you have a time range of <span style="color: #252525;">±</span><span style="color: #252525;">292 million years. This is Java’s internal representation. With one tick equaling 100 nanoseconds (0.1 microsecond), you have a time range of ±29,227 years, which is what Win32 does. Should be plenty!</span></span></p>
+<h2>Have a solid ETL procedure</h2>
+<p>ETL means “extract, transform, load” and is the term for taking data out of one format or system and loading it into another. The step to make sure is solid when you are dealing with high frequency data is the “load” step. Try to make a process where you can revert a botched load automatically. If you don’t do this, guaranteed someone or something will screw up an import, and you will be left wading through millions of rows of data to fix it or re-importing everything from your source system.</p>
+
+<p>The most basic way to make the load step revertible is to just make a copy of your time series before writing anything to it. You could devise a more sophisticated process, like using rsync to make diffs of your time series, but be nice to your future self and make backups at the very least!</p>
+
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/2014/04/the-business-model-sketch">
+        The Business Model Sketch
+      </a>
+    </h1>
+
+    <span class="post-date">22 Apr 2014</span>
+
+    <p>I was helping a friend work through some business ideas, and realized that like writing an outline helps you structure a essay, doing a “business model sketch” can help you break apart a business idea and evaluate its viability. Just like an essay needs a thesis, a body and a conclusion or it can fall flat, a business model needs specific components or it is not viable. I identified six components that roughly draw from <a title="The Personal MBA by Joshua Kaufman at Amazon" href="http://www.amazon.com/The-Personal-MBA-Master-Business/dp/1591845572" target="_blank">The Personal MBA</a> and the “lean startup” philosophy. If you are thinking of starting a new business, consider taking one page of paper, drawing six boxes, and filling out these six areas: customer, value proposition, marketing, sales, value delivery, and finance.</p>
+
+<p>The problem with many business ideas is that, while they sometimes hit on a few of these areas, they are weak in others. That can be okay, but as a startup, your goal should be to develop a plan about how to address your idea’s weak points, and quickly test whether that plan is viable. If it is, great! If not, reconsider or proceed with caution!</p>
+<h2>The template</h2>
+<h3>The customer</h3>
+<p>The specific person to whom value is being provided <strong>and is making a purchasing decision</strong>. Many times a business’s value proposition will include many people. For example, if you are selling family vacations, your business is offering value to the father (maybe you bundle in a few rounds of golf), mother (there’s a reason cruises have spas), and kids (I don’t think Disney pays actors to dress as Micky Mouse for dad). This is important to understand, especially when you get to the value delivery portion of the business model sketch. However, first identify the decision maker!</p>
+<h3>Value proposition</h3>
+<p>The value proposition is a description of the value you are providing your customer. Remember that your customer is the person making the purchasing decision, so when crafting your value proposition, you need to understand the wants and needs of that particular person above any secondary party.</p>
+
+<p>Ideally, focus your value proposition on addressing core human drives. The Personal MBA identifies <a href="http://book.personalmba.com/core-human-drives/" target="_blank">five core human drives</a>: the drives to acquire, bond, learn, defend, and feel. Many consumer products clearly target their value propositions to these core human drives. This can be difficult if you are not selling consumer products or services, but if you look closely, many business-to-business or business-to-government sales are targeted the same way. Living in Washington, DC I notice this every time I go through the Pentagon metro station. Large defense contractors clearly target their buyer’s core human drive to defend with advertisements that depict the strength and sophistication of their offerings. This example of <a href="http://www.huffingtonpost.com/2013/09/06/drone-ads-dc-metro_n_3880026.html" target="_blank">advertisements for Northrop Grumman’s unmanned drones</a> is a great example.</p>
+<h3>Marketing</h3>
+<p>Marketing is fundamentally your strategy for getting your customer’s attention to deliver your value proposition. When you create a business model sketch, you need to attempt to identify how you will reach enough customers at an economical cost. If you have an excellent value proposition but your customers do not know about it, your business model will fail.</p>
+
+<p>In the marketing portion of your sketch, you should also attempt to identify in rough terms the market size and dynamics: how many potential customers do you have and is that number increasing and/or gaining purchasing power?</p>
+<h3>Sales</h3>
+<p>If marketing is your strategy for reaching your target customer, sales is your strategy for negotiating a contract to deliver your value proposition in exchange for money. For an online business, this could be as simple as “sign up for PayPal and put a Buy Now button on my website”. If you are an enterprise software, this could be extensive contract negotiations.</p>
+
+<p>Sales and marketing are closely intertwined, but separating them out to different boxes in the business model sketch should help you to separate the <em>act of reaching your customer and delivering your value proposition</em> (marketing) and <em>the mechanics of “closing the deal”</em> (sales).</p>
+<h3>Value delivery</h3>
+<p>This is what many people think of as the meat of your business model, but the previous sections are also key to determining its viability. Value delivery is the processes that delivery the promised value to your customers. In the family vacation example, this is the operations of your hotel from hiring staff to procuring food and drinks for the restaurant. If you are an online business, this is the cost of developing your website as well as operational cost of running your servers and supporting your customers.</p>
+<h3>Finance</h3>
+<p>The finance section should answer “what financial resources do I need to support this business model, and what is the return on investment?”. This is hard to answer in specifics in a business model sketch, and should be tackled in more detail in a complete business plan. However, once you complete the other sections, you should be able to answer these questions:</p>
+<ul>
+	<li>Is this a financial capital-intensive business to set up? To run? If yes, what is the risk to capital committed to the business? What return can I offer owners of capital given that risk? How can I source that capital, loans or equity investment?</li>
+	<li>Is this a human capital-intensive business to set up? If yes, what is my recruitment strategy? Can I attract the right talent? Would I compensate them with equity or a salary?</li>
+</ul>
+
+  </div>
   
   <div class="post">
     <h1 class="post-title">
@@ -388,177 +463,6 @@ END $$;
 Bitcoin volatility looks like it is dropping over time, especially from the early days in 2011 and 2012, except for a large bump in volatility in April of 2013. That was probably sparked by problems at Bitcoin’s largest exchange, Mt. Gox during that time period. This decrease is despite an increase in speculative interest in Bitcoin and moves by China to curtail the currency’s use.</p>
 
 <p>Whether Bitcoin takes off is anyone’s guess and predicting if it does is probably a fool’s errand. There are lots of smart people working on it, but big questions about its viability still remain. In either case, it should be exciting to watch!</p>
-
-  </div>
-  
-  <div class="post">
-    <h1 class="post-title">
-      <a href="/2014/01/tech-predictions-for-2014">
-        Tech Predictions for 2014
-      </a>
-    </h1>
-
-    <span class="post-date">28 Jan 2014</span>
-
-    <p>This is a just a bunch of fun tech predictions for 2014. I can’t claim any insider knowledge, but it will be interesting to look back on them at the end of the year to see what the outcomes are!</p>
-<h2>Bitcoin will become "legitimate", but not widespread</h2>
-<p>In 2014, regulators will likely issue guidance on how exactly companies and people can deal in Bitcoin without running afoul of anti-money laundering and money transmitter regulations, and how it is to be taxed. This will “legitimize” Bitcoin, but because of the difficulty of using the cryptocurrency and the insane <a title="Bitcoin Volatility - Business Insider" href="http://www.businessinsider.com/bitcoin-volatility-2013-12" target="_blank">amount of volatility of Bitcoin</a> against fiat money, it will not become mainstream in 2014. Instead, Bitcoin will be relegated to particular types of transactions that the mainstream banks are either not accepting (due to the high probability of fraud or high compliance costs) or are charging exorbitant fees to facilitate. These will likely be cross-border transactions, especially in countries with capital controls (Argentina), <a title="Banks Say No to Marijuana Money, Legal or Not - NY Times" href="http://www.nytimes.com/2014/01/12/us/banks-say-no-to-marijuana-money-legal-or-not.html" target="_blank">legally grey-area transactions</a>, or transactions that the major payment processors don’t accept.</p>
-<h2>Docker plus Deis or Flynn will result in an "open-source Heroku" and lots of dev-ops innovation</h2>
-<p>Heroku is probably one of the biggest dev-ops innovations in the last five years, making it vastly easier to deploy web applications, freeing development teams to actually build applications instead of focusing on DevOps. Heroku’s <a href="http://12factor.net">12 Factor App</a> architecture is now widely used and 2014 will see that continuing. However, Heroku has a few problems.</p>
-
-<p>First, There currently isn’t a good way to “build your own Heroku” out of open source components. If Heroku is too constraining, you are forced to spin up your own servers on Amazon Web Services for part of your application, which eliminates lots of the advantages Heroku brings to the table. Last year there was a ton of excitement about Linux containers (LXC) and Docker, which is abstraction on top of LXC that makes them easier to manage. Both Heroku and Google Cloud use Linux containers internally, but they are closed-source implementations. Docker will likely begin to change that this year.</p>
-
-<p>However, Docker alone is not a Heroku replacement. Much of the innovation in Heroku lies in the build packs and routing mesh, which Docker does not provide. Two other open source projects aim to become that layer on top of Docker, and these are the ones I’m most excited to watch. The first is <a href="http://deis.io/" target="_blank">Deis</a>, which seems to be the furthest along in creating an open-source Heroku. Deis has both a routing mesh and an application layer created as well as scripts to automatically scale your “personal Heroku” on AWS, Digital Ocean and Rackspace. Flynn has many of the same goals, but doesn’t appear to be as far along. Deis has commercial support from Opsware, while <a href="https://flynn.io/" target="_blank">Flynn is raising money Kickstarter-style</a> to build out their platform. In any case, while Heroku is great, it is very exciting to see open source competitors come to the scene.</p>
-<h2>AngularJS and EmberJS will win the front-end wars for web apps</h2>
-<p>For highly interactive web apps, both AngularJS and EmberJS will become the clear choices in 2014. Backbone, Knockout and other front-end JS frameworks will see declining usage simply because they don’t provide as much of a framework as AngularJS or EmberJS. For new sites except for “CMS-like” apps, people will stop generating HTML on the server and push the page rendering to Javascript on the browser. Because of this, back-end frameworks will pivot towards being better REST API servers and focus less on their HTML template rendering abilities. The wildcard is “CMS-style” sites that need to be indexed by Google. While Google’s crawler can execute Javascript, content-heavy sites will still need a mechanism to serve HTML from the server for reliable SEO. This means that full-stack Rails apps will still be important in 2014. I think the writing is on the wall for this kind of app, however.</p>
-<h2>Mobile will continue to be "write twice" for the highest quality</h2>
-<p>Unfortunately, while HTML5 is great, it still won’t deliver the highest quality apps on mobile in 2014. As a cost-saving measure, or for apps that don’t need lots of interaction, HTML5 will be a viable choice. However, to create the highest-quality mobile apps in 2014, we’ll still need to write them twice: once for Android and once for iOS.</p>
-<h2>Wearable tech won’t be mainstream; in fact, society will push back from being "always connected"</h2>
-<p>Google Glass and the like will remain curiosities and not mainstream. In fact, I think that people are beginning to push back from being always connected to the Internet. Smartphone usage in many social situations is become a faux pas and the word <a title="I, Glasshole" href="http://www.wired.com/gadgetlab/2013/12/glasshole/" target="_blank">“glassholes”</a> has already been coined for people that wear Google Glass in public. That being said, we will see the Internet smartly integrated into more consumer products, including continued innovation in automobile technology and home automation. The key for the “Internet of things” in 2014 will be <i>unobtrusive, discrete, and large value-add</i>, which probably isn’t wearable technology in its current form.</p>
-
-  </div>
-  
-  <div class="post">
-    <h1 class="post-title">
-      <a href="/2013/08/motorcycling-in-laos">
-        Motorcycling in Laos
-      </a>
-    </h1>
-
-    <span class="post-date">13 Aug 2013</span>
-
-    <p>Last month I spent a week motorcycling around Laos with a friend, starting at the capital and heading north through probably one of the most scenic parts of Southeast Asia. This is still a fairly undeveloped part of the world, meaning empty roads, not many other tourists, and an unspoiled landscape. It also means the logistics of this trip were not easy, but the ride was definitely worth it. If you are interested in doing a trip like this, read on!</p>
-<h2>Preparing for the trip</h2>
-<p>Roads in Laos range from two lanes and decent blacktop on the main highways to muddy dirt tracks in the villages, so you will want to be a fairly proficient rider with at least some dirt biking experience before you go. We went early in the rainy season, which contributed to the mud, but even in the dry season, a lot of the smaller roads will require some dirt riding skills.</p>
-
-<p>The two most sensible starting points for a trip like this are the capital, Vientiane, and Luang Prabang, a UNESCO World Heritage Town about 340km to the north. Both cities have international airports, but they are very small, so expect to fly through a major Asian hub like Bangkok or Seoul if coming from the U.S. or Europe. You can also take a bus from Thailand, Cambodia or Vietnam if you are already in Southeast Asia, but expect it to be an overnight bus (12 hours+) on mountainous, winding roads.</p>
-<h2>Renting bikes</h2>
-<p>We rented a Honda CRF250 and CRF230 from <a title="Remote Asia Outfitters" href="http://remoteasia.com" target="_blank">Remote Asia</a> in Vientiane, who were excellent. The bikes were in great shape and Jim from Remote Asia was very helpful when we had a minor mishap (I lost an ignition key to my bike!). You really will want to rent bikes from someone who can also provide a cell phone and “roadside assistance”, and by that I mean basically translating via cell phone and recommending mechanics. English is not widely spoken in Laos and emergency services are non-existent, so you will want an English speaking contact in-country from your rental agency.</p>
-
-<p>We had no issues with Laotian police (in fact we did not see any outside of Vientiane), so it would seem that you don’t strictly need an International Drivers License or a motorcycle license at all. Your rental bike should come with a Laotian number plate and turn signals, and riding with a headlight during the day is apparently illegal so should be avoided.</p>
-<h2>The route</h2>
-<p>Laos has a few excellent motorcycle routes, and the one we took seems to be the most popular. You can order an excellent map of Laos with elevation profiles, road conditions, and city maps from GT Rider in Thailand <a href="http://www.gt-rider.com/maps-of-thailand-laos-maps/laos-guide-map" target="_blank">here</a>. This route took us 6 days of riding at a fairly leisurely pace. There are three long days of riding (over 150km) and one day each spent in Vang Vieng, Ponsavan, and Luang Prabang that you can use to explore the area surrounding these cities.</p>
-
-<p>In addition to the GT Rider map, you should also get an Open Street Map app for your smart phone. OSM actually had pretty good coverage of Laos, including some of the caves and waterfalls outside of the cities. For Android, try <a href="https://play.google.com/store/apps/details?id=net.osmand">OSMAnd</a>, which lets you download country maps for offline use.</p>
-
-<p>Here’s a map of the route we took and details of each leg.</p>
-
-<iframe src="https://maps.google.com/maps/ms?msa=0&amp;msid=213059449424618329795.0004e1d4c6c3d82758c09&amp;ie=UTF8&amp;t=p&amp;ll=18.921876,102.661743&amp;spn=2.494061,3.515625&amp;z=8&amp;output=embed" width="640" height="480" scrolling="no" frameborder="0" securitykey="da39a3ee5e6b4b0d3255bfef95601890afd80709"></iframe>
-
-<p> </p>
-<h3>Vientiane to Vang Vieng, 154km</h3>
-<picture>
-    <source srcset="/generated/wp/uploads/2013/08/IMG_20130712_134937-1050by788-79b4b6.jpg" media="(min-width: 40em) and (-webkit-min-device-pixel-ratio: 1.5), (min-width: 40em) and (min-resolution: 144dpi)" />
-    <source srcset="/generated/wp/uploads/2013/08/IMG_20130712_134937-700by525-79b4b6.jpg" media="(min-width: 40em)" />
-    <source srcset="/generated/wp/uploads/2013/08/IMG_20130712_134937-675by506-79b4b6.jpg" media="(min-width: 30em) and (-webkit-min-device-pixel-ratio: 1.5), (min-width: 30em) and (min-resolution: 144dpi)" />
-    <source srcset="/generated/wp/uploads/2013/08/IMG_20130712_134937-450by338-79b4b6.jpg" media="(min-width: 30em)" />
-    <source srcset="/generated/wp/uploads/2013/08/IMG_20130712_134937-525by300-79b4b6.jpg" media="(-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 144dpi)" />
-    <source srcset="/generated/wp/uploads/2013/08/IMG_20130712_134937-350by200-79b4b6.jpg" />
-    <img src="/generated/wp/uploads/2013/08/IMG_20130712_134937-350by200-79b4b6.jpg" class="blog-full" itemprop="image" />
-  </picture>
-
-<picture>
-    <source srcset="/generated/wp/uploads/2013/08/IMG_20130712_145318-1050by788-ea497f.jpg" media="(min-width: 40em) and (-webkit-min-device-pixel-ratio: 1.5), (min-width: 40em) and (min-resolution: 144dpi)" />
-    <source srcset="/generated/wp/uploads/2013/08/IMG_20130712_145318-700by525-ea497f.jpg" media="(min-width: 40em)" />
-    <source srcset="/generated/wp/uploads/2013/08/IMG_20130712_145318-675by506-ea497f.jpg" media="(min-width: 30em) and (-webkit-min-device-pixel-ratio: 1.5), (min-width: 30em) and (min-resolution: 144dpi)" />
-    <source srcset="/generated/wp/uploads/2013/08/IMG_20130712_145318-450by338-ea497f.jpg" media="(min-width: 30em)" />
-    <source srcset="/generated/wp/uploads/2013/08/IMG_20130712_145318-525by300-ea497f.jpg" media="(-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 144dpi)" />
-    <source srcset="/generated/wp/uploads/2013/08/IMG_20130712_145318-350by200-ea497f.jpg" />
-    <img src="/generated/wp/uploads/2013/08/IMG_20130712_145318-350by200-ea497f.jpg" class="blog-full" itemprop="image" />
-  </picture>
-
-<picture>
-    <source srcset="/generated/wp/uploads/2013/08/IMG_20130712_124142-1050by1400-2c318b.jpg" media="(min-width: 40em) and (-webkit-min-device-pixel-ratio: 1.5), (min-width: 40em) and (min-resolution: 144dpi)" />
-    <source srcset="/generated/wp/uploads/2013/08/IMG_20130712_124142-700by933-2c318b.jpg" media="(min-width: 40em)" />
-    <source srcset="/generated/wp/uploads/2013/08/IMG_20130712_124142-675by900-2c318b.jpg" media="(min-width: 30em) and (-webkit-min-device-pixel-ratio: 1.5), (min-width: 30em) and (min-resolution: 144dpi)" />
-    <source srcset="/generated/wp/uploads/2013/08/IMG_20130712_124142-450by600-2c318b.jpg" media="(min-width: 30em)" />
-    <source srcset="/generated/wp/uploads/2013/08/IMG_20130712_124142-525by300-2c318b.jpg" media="(-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 144dpi)" />
-    <source srcset="/generated/wp/uploads/2013/08/IMG_20130712_124142-350by200-2c318b.jpg" />
-    <img src="/generated/wp/uploads/2013/08/IMG_20130712_124142-350by200-2c318b.jpg" class="blog-full" itemprop="image" />
-  </picture>
-
-<p>If picking up your bikes in Vientiane, likely your first stop will be <a href="http://en.wikipedia.org/wiki/Vang_Vieng" target="_blank">Vang Vieng</a>. The ride to Vang Vieng is 154 km and fairly easy and flat until the last 50km or so where there are some small hills. Leaving Vientiane is where you will probably encounter the most traffic of the trip (not much!), but within 50km, it drops off a lot.</p>
-
-<p>Vang Vieng is a tourist town along the Nam Song river with lots of caving, waterfalls, and rafting available nearby. It is definitely worth at least one whole day exploring outside of the town. I think of the three towns we visited, Vang Vieng had the most spectacular scenery. The town is surrounded by a dramatic <a href="http://en.wikipedia.org/wiki/Karst_topography">karst landscape</a> that is even more surreal in the rainy season when the peaks are surrounded in fog. In Vang Vieng, we went to a cave, waterfall and “blue lagoon” (swimming hole) on our one full day there. These were all found on dirt paths leading out from the town, for which Open Street Map was a real help locating.</p>
-<h3>Vang Vieng to Ponsavan, 233km</h3>
-<picture>
-    <source srcset="/generated/wp/uploads/2013/08/IMG_20130713_074030-1050by1400-b8a7ec.jpg" media="(min-width: 40em) and (-webkit-min-device-pixel-ratio: 1.5), (min-width: 40em) and (min-resolution: 144dpi)" />
-    <source srcset="/generated/wp/uploads/2013/08/IMG_20130713_074030-700by933-b8a7ec.jpg" media="(min-width: 40em)" />
-    <source srcset="/generated/wp/uploads/2013/08/IMG_20130713_074030-675by900-b8a7ec.jpg" media="(min-width: 30em) and (-webkit-min-device-pixel-ratio: 1.5), (min-width: 30em) and (min-resolution: 144dpi)" />
-    <source srcset="/generated/wp/uploads/2013/08/IMG_20130713_074030-450by600-b8a7ec.jpg" media="(min-width: 30em)" />
-    <source srcset="/generated/wp/uploads/2013/08/IMG_20130713_074030-525by300-b8a7ec.jpg" media="(-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 144dpi)" />
-    <source srcset="/generated/wp/uploads/2013/08/IMG_20130713_074030-350by200-b8a7ec.jpg" />
-    <img src="/generated/wp/uploads/2013/08/IMG_20130713_074030-350by200-b8a7ec.jpg" class="blog-full" itemprop="image" />
-  </picture>
-
-<picture>
-    <source srcset="/generated/wp/uploads/2013/08/IMG_20130714_074338-1050by788-f3806b.jpg" media="(min-width: 40em) and (-webkit-min-device-pixel-ratio: 1.5), (min-width: 40em) and (min-resolution: 144dpi)" />
-    <source srcset="/generated/wp/uploads/2013/08/IMG_20130714_074338-700by525-f3806b.jpg" media="(min-width: 40em)" />
-    <source srcset="/generated/wp/uploads/2013/08/IMG_20130714_074338-675by506-f3806b.jpg" media="(min-width: 30em) and (-webkit-min-device-pixel-ratio: 1.5), (min-width: 30em) and (min-resolution: 144dpi)" />
-    <source srcset="/generated/wp/uploads/2013/08/IMG_20130714_074338-450by338-f3806b.jpg" media="(min-width: 30em)" />
-    <source srcset="/generated/wp/uploads/2013/08/IMG_20130714_074338-525by300-f3806b.jpg" media="(-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 144dpi)" />
-    <source srcset="/generated/wp/uploads/2013/08/IMG_20130714_074338-350by200-f3806b.jpg" />
-    <img src="/generated/wp/uploads/2013/08/IMG_20130714_074338-350by200-f3806b.jpg" class="blog-full" itemprop="image" />
-  </picture>
-
-<picture>
-    <source srcset="/generated/wp/uploads/2013/08/IMG_20130713_142645-1050by788-4b243a.jpg" media="(min-width: 40em) and (-webkit-min-device-pixel-ratio: 1.5), (min-width: 40em) and (min-resolution: 144dpi)" />
-    <source srcset="/generated/wp/uploads/2013/08/IMG_20130713_142645-700by525-4b243a.jpg" media="(min-width: 40em)" />
-    <source srcset="/generated/wp/uploads/2013/08/IMG_20130713_142645-675by506-4b243a.jpg" media="(min-width: 30em) and (-webkit-min-device-pixel-ratio: 1.5), (min-width: 30em) and (min-resolution: 144dpi)" />
-    <source srcset="/generated/wp/uploads/2013/08/IMG_20130713_142645-450by338-4b243a.jpg" media="(min-width: 30em)" />
-    <source srcset="/generated/wp/uploads/2013/08/IMG_20130713_142645-525by300-4b243a.jpg" media="(-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 144dpi)" />
-    <source srcset="/generated/wp/uploads/2013/08/IMG_20130713_142645-350by200-4b243a.jpg" />
-    <img src="/generated/wp/uploads/2013/08/IMG_20130713_142645-350by200-4b243a.jpg" class="blog-full" itemprop="image" />
-  </picture>
-
-<p>The second long day of riding, Vang Vieng to Ponsavan, is 233 km of challenging riding with tons of very steep switchbacks and incredible views of some of the highest peaks in Laos. On this part of the ride, you are heading to <a href="http://wikitravel.org/en/Phonsavan">Ponsavan</a>, which is the capital of the providence containing the <a href="http://wikitravel.org/en/Plain_of_Jars">Plain of Jars</a>, a neolithic archeological site with large stone jars (some over 4 feet tall). The Plain of Jars was also bombed heavily during the Vietnam War as part of the CIA’s covert war in Laos, so there is lots of war history in this area as well. Ponsavan has a few NGOs operating to clear unexploded ordinance that have interesting exhibits in the town on the war.</p>
-<h3>Ponsavan to Luang Prabang, 259km</h3>
-<picture>
-    <source srcset="/generated/wp/uploads/2013/08/IMG_20130715_111204-1050by788-b9e7f8.jpg" media="(min-width: 40em) and (-webkit-min-device-pixel-ratio: 1.5), (min-width: 40em) and (min-resolution: 144dpi)" />
-    <source srcset="/generated/wp/uploads/2013/08/IMG_20130715_111204-700by525-b9e7f8.jpg" media="(min-width: 40em)" />
-    <source srcset="/generated/wp/uploads/2013/08/IMG_20130715_111204-675by506-b9e7f8.jpg" media="(min-width: 30em) and (-webkit-min-device-pixel-ratio: 1.5), (min-width: 30em) and (min-resolution: 144dpi)" />
-    <source srcset="/generated/wp/uploads/2013/08/IMG_20130715_111204-450by338-b9e7f8.jpg" media="(min-width: 30em)" />
-    <source srcset="/generated/wp/uploads/2013/08/IMG_20130715_111204-525by300-b9e7f8.jpg" media="(-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 144dpi)" />
-    <source srcset="/generated/wp/uploads/2013/08/IMG_20130715_111204-350by200-b9e7f8.jpg" />
-    <img src="/generated/wp/uploads/2013/08/IMG_20130715_111204-350by200-b9e7f8.jpg" class="blog-full" itemprop="image" />
-  </picture>
-
-<picture>
-    <source srcset="/generated/wp/uploads/2013/08/IMG_20130718_143756-1050by788-927e4d.jpg" media="(min-width: 40em) and (-webkit-min-device-pixel-ratio: 1.5), (min-width: 40em) and (min-resolution: 144dpi)" />
-    <source srcset="/generated/wp/uploads/2013/08/IMG_20130718_143756-700by525-927e4d.jpg" media="(min-width: 40em)" />
-    <source srcset="/generated/wp/uploads/2013/08/IMG_20130718_143756-675by506-927e4d.jpg" media="(min-width: 30em) and (-webkit-min-device-pixel-ratio: 1.5), (min-width: 30em) and (min-resolution: 144dpi)" />
-    <source srcset="/generated/wp/uploads/2013/08/IMG_20130718_143756-450by338-927e4d.jpg" media="(min-width: 30em)" />
-    <source srcset="/generated/wp/uploads/2013/08/IMG_20130718_143756-525by300-927e4d.jpg" media="(-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 144dpi)" />
-    <source srcset="/generated/wp/uploads/2013/08/IMG_20130718_143756-350by200-927e4d.jpg" />
-    <img src="/generated/wp/uploads/2013/08/IMG_20130718_143756-350by200-927e4d.jpg" class="blog-full" itemprop="image" />
-  </picture>
-
-<picture>
-    <source srcset="/generated/wp/uploads/2013/08/IMG_20130716_083641-1050by788-7014f0.jpg" media="(min-width: 40em) and (-webkit-min-device-pixel-ratio: 1.5), (min-width: 40em) and (min-resolution: 144dpi)" />
-    <source srcset="/generated/wp/uploads/2013/08/IMG_20130716_083641-700by525-7014f0.jpg" media="(min-width: 40em)" />
-    <source srcset="/generated/wp/uploads/2013/08/IMG_20130716_083641-675by506-7014f0.jpg" media="(min-width: 30em) and (-webkit-min-device-pixel-ratio: 1.5), (min-width: 30em) and (min-resolution: 144dpi)" />
-    <source srcset="/generated/wp/uploads/2013/08/IMG_20130716_083641-450by338-7014f0.jpg" media="(min-width: 30em)" />
-    <source srcset="/generated/wp/uploads/2013/08/IMG_20130716_083641-525by300-7014f0.jpg" media="(-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 144dpi)" />
-    <source srcset="/generated/wp/uploads/2013/08/IMG_20130716_083641-350by200-7014f0.jpg" />
-    <img src="/generated/wp/uploads/2013/08/IMG_20130716_083641-350by200-7014f0.jpg" class="blog-full" itemprop="image" />
-  </picture>
-
-<p>The last long day of riding will take you 259 km from Ponsavan to Luang Prabang (backtracking to Pho Khoun, then north to Luang Prabang). Backtracking in this way isn’t all that bad because the scenery and riding is so great heading from Pho Khoun to Ponsavan, you’ll have no problem doing it twice.</p>
-
-<p>Pho Khoun makes a good stopping place for lunch, as its about at the midpoint of this ride and there are a few places to refuel and grab lunch. From Pho Khoun, you’ll have similar riding (and that’s to say great!) to Luang Prabang.</p>
-
-<p><a href="http://wikitravel.org/en/Luang_Prabang">Luang Prabang</a> is a UNESCO World Heritage Site and has by far the best developed tourist infrastructure of the three cities we visited. Luang Prabang is at the intersection of the Mekong River and the Nam Khan River and has a large temple in the center of the city with great views of both rivers. There are waterfalls about 20km outside of town as well as rafting, elephant tours, and kayaking if you choose to stay here for a few days.</p>
-
-<picture>
-    <source srcset="/generated/wp/uploads/2013/08/laos_ride_profile-1050by715-c872f4.png" media="(min-width: 40em) and (-webkit-min-device-pixel-ratio: 1.5), (min-width: 40em) and (min-resolution: 144dpi)" />
-    <source srcset="/generated/wp/uploads/2013/08/laos_ride_profile-700by476-c872f4.png" media="(min-width: 40em)" />
-    <source srcset="/generated/wp/uploads/2013/08/laos_ride_profile-675by459-c872f4.png" media="(min-width: 30em) and (-webkit-min-device-pixel-ratio: 1.5), (min-width: 30em) and (min-resolution: 144dpi)" />
-    <source srcset="/generated/wp/uploads/2013/08/laos_ride_profile-450by306-c872f4.png" media="(min-width: 30em)" />
-    <source srcset="/generated/wp/uploads/2013/08/laos_ride_profile-525by300-c872f4.png" media="(-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 144dpi)" />
-    <source srcset="/generated/wp/uploads/2013/08/laos_ride_profile-350by200-c872f4.png" />
-    <img src="/generated/wp/uploads/2013/08/laos_ride_profile-350by200-c872f4.png" class="blog-full" itemprop="image" />
-  </picture>
-
 
   </div>
   

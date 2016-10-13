@@ -182,6 +182,10 @@
           
         
       
+        
+          
+        
+      
 
     </nav>
 
@@ -194,6 +198,137 @@
 
     <div class="content container">
       <div class="posts">
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/2015/07/nodejs-and-hapi-for-rails-developers">
+        NodeJS and Hapi for Rails Developers
+      </a>
+    </h1>
+
+    <span class="post-date">22 Jul 2015</span>
+
+    <p>This post is an <strong>work in progress</strong> list of tips and tricks I’ve learned working on a HapiJS API after mostly coding Rails APIs for the last few years. I expect to update it as I learn more.</p>
+
+<p>If you are a Rails developer looking to transition to NodeJS, hopefully this will save you some time. If you are a more seasoned NodeJS or Hapi developer and have suggestions for improving this, please let me know in the comments.</p>
+
+<h2 id="async-programming">Async Programming</h2>
+
+<h3 id="error-first-callbacks-promises-or-asyncawait">Error-first callbacks, promises, or <code class="highlighter-rouge">async</code>/<code class="highlighter-rouge">await</code></h3>
+<p>Most Rails developers have written some Javascript, so you are probably familiar with callbacks. On the client, having nested callbacks is relatively rare. On the server, however, they are far more common. A simple example would be a server method that needs to make a handful of database calls, with all of the depending on the outcome of the others. This would be trivial to write in a sequential way, but with NodeJS, you will need to nest callbacks to accomplish the same thing.</p>
+
+<p>This is both the best thing about NodeJS and the most annoying. It makes things very performant, because with callbacks you continually return control to the main event loop, freeing the main thread to move on to other things. In Rails, unless you are using a threaded server like Puma, waiting on a database call will block the entire process.</p>
+
+<p>All of Node core and most of the libraries use error-first callbacks. If the first argument to the callback function is truthy, then you know the callback has failed with an error. You’ll see a lot of code in NodeJS like this:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">myCallbackFunction</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">result</span><span class="p">)</span> <span class="p">{</span>
+   <span class="k">if</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="k">return</span> <span class="nx">err</span><span class="p">;</span>
+   <span class="c1">// process the result</span>
+<span class="p">});</span>
+</code></pre>
+</div>
+
+<p>This gets nasty when you have many nested callbacks and has been dubbed “callback hell”.</p>
+
+<p>One way to fix this is to use a promise. You can typically turn any error-first callback function into a promise-returning function with <code class="highlighter-rouge">Promise.promisify()</code>.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">Promise</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'bluebird'</span><span class="p">);</span> <span class="c1">// bluebird is a popular promise library</span>
+<span class="kd">var</span> <span class="nx">myAsyncFunction</span> <span class="o">=</span> <span class="nx">Promise</span><span class="p">.</span><span class="nx">promisify</span><span class="p">(</span><span class="nx">myCallbackFunction</span><span class="p">);</span>
+
+<span class="nx">myAsyncFunction</span><span class="p">(</span><span class="nx">options</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">result</span><span class="p">)</span> <span class="p">{</span>
+   <span class="c1">// process result</span>
+<span class="p">}).</span><span class="k">catch</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+   <span class="c1">// process error</span>
+<span class="p">});</span>
+</code></pre>
+</div>
+
+<p>This doesn’t look Earth-shattering, but promises can make deeply nested callbacks more readable. I like promises from my AngularJS programming, but they aren’t widely used in the Node community. If you attempt to use them, you feel like you are fighting an uphill battle since everyone still uses error-first callbacks. They can be vital in some situations, however.</p>
+
+<h4 id="es7-and-asyncawait">ES7 and <code class="highlighter-rouge">async</code>/<code class="highlighter-rouge">await</code></h4>
+<p>The next generation of Javascript will hopefully solve all of our problems with the addition of two new keywords: <code class="highlighter-rouge">async</code> and <code class="highlighter-rouge">await</code>. These use promises under the hood, but you can use <code class="highlighter-rouge">try</code>-<code class="highlighter-rouge">catch</code> and don’t need <code class="highlighter-rouge">then()</code>:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">try</span> <span class="p">{</span>
+   <span class="kd">var</span> <span class="nx">result</span> <span class="o">=</span> <span class="nx">await</span> <span class="nx">myAsyncFunction</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span>
+   <span class="c1">// process result</span>
+<span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">ex</span><span class="p">)</span> <span class="p">{</span>
+   <span class="c1">// handle error</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p>You can use this today if you transpile with the Traceur compiler, but not much of the Node community is doing that yet. Once more people get on board, this will be a <em>huge</em> improvement in Javascript.</p>
+
+<h4 id="what-do-do-today">What do do today?</h4>
+<p>Today, I think you should stick with error-first callbacks and use promises if absolutely necessary. Another library you can look into is the <a href="https://github.com/caolan/async"><code class="highlighter-rouge">async</code></a> library, which gives you lots of nice functions to handle many callbacks in series or parallel.</p>
+
+<h2 id="unit-testing">Unit Testing</h2>
+
+<h3 id="npm-packages-to-use">NPM packages to use</h3>
+<ul>
+  <li><a href="https://github.com/hapijs/lab">Lab</a> - Hapi’s unit testing framework. It supports both TestUnit and RSpec style tests. I’m using the RSpec style.</li>
+  <li><a href="https://github.com/hapijs/code">Code</a> - An assertion library. This handles <code class="highlighter-rouge">expect</code> statements. There are a <a href="http://andyfiedler.com/blog/gotchas-with-hapis-code-library-327/">few gotchas</a>.</li>
+</ul>
+
+<h3 id="test-folder-setup">Test folder setup</h3>
+<p>I’m using RSpec style tests, so my folder hierarchy looks like this:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>+ /
+|
++---specs
+|
++---requests
+| |
+| +---users
+| |
+| +---get.js
+|
++---models
+|
++---user.js
+</code></pre>
+</div>
+
+<h3 id="running-your-specs">Running your specs</h3>
+<p>To run your specs, you have two choices. You can either install lab globally and run them with the <code class="highlighter-rouge">lab</code> command, or you can change your <code class="highlighter-rouge">package.json</code> file to set what to run for <code class="highlighter-rouge">npm test</code>. I usually do the second options, because it lets me specify some default options for lab. Here’s what the section of <code class="highlighter-rouge">package.json</code> file looks like:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
+   </span><span class="nt">"scripts"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"test"</span><span class="p">:</span><span class="w"> </span><span class="s2">"env $(cat .env | xargs) lab -v -L -m 0"</span><span class="w">
+   </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+</div>
+
+<p>The <code class="highlighter-rouge">xargs</code> part is to set the environmental variables before running the tests from the <code class="highlighter-rouge">.env</code> file. There probably is a better way to do this, but that is working for now.</p>
+
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/2015/07/getting-node-inspector-to-work-with-labhapijs">
+        Getting Node-Inspector to work with Lab&#47;HapiJS
+      </a>
+    </h1>
+
+    <span class="post-date">17 Jul 2015</span>
+
+    <p>Debugging specs with console.log statements is a real pain. Node-Inspector is far better, giving you an environment that is basically the same as Chrome DevTools.</p>
+
+<p>To use it with Lab, add this script to your package.json file:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="p">{</span>
+  <span class="c1">// other package.json stuff</span>
+  <span class="s2">"scripts"</span><span class="err">:</span> <span class="p">{</span>
+    <span class="s2">"test-debug"</span><span class="err">:</span> <span class="s2">"node-debug ./node_modules/.bin/lab"</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p>You can now run all of your specs with <code class="highlighter-rouge">npm run test-debug</code> , or run the specs in just one file with <code class="highlighter-rouge">npm run test-debug &lt;path to your spec file&gt;.js</code>.</p>
+
+  </div>
   
   <div class="post">
     <h1 class="post-title">
@@ -277,42 +412,6 @@
 <p><strong>Step 4: </strong>Host on <a href="https://help.github.com/articles/using-jekyll-with-pages/" target="_blank">Github Pages</a>.</p>
 
 <p><strong>Step 5: </strong>Profit?</p>
-
-  </div>
-  
-  <div class="post">
-    <h1 class="post-title">
-      <a href="/2015/06/quick-tip-fixing-postgres-operator-class-gin_trgm_ops-does-not-exist-for-access-method-gin">
-        Quick Tip: Fixing Postgres operator class "gin_trgm_ops" does not exist for access method "gin"
-      </a>
-    </h1>
-
-    <span class="post-date">17 Jun 2015</span>
-
-    <p>This error can show up when you are trying to load a schema into a new database in Postgres that has been dumped from a database with the pg_trgm extension. You can fix it by adding the extension to the template database (template1) so that when you create a new database, it is already there, ready to go.</p>
-
-<p>To do this, run this at the command line:</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>psql -d template1 -c 'create extension pg_trgm;'
-</code></pre>
-</div>
-
-  </div>
-  
-  <div class="post">
-    <h1 class="post-title">
-      <a href="/2015/05/workaround-google-apps-for-business-wont-automatically-add-flights-to-your-calendar">
-        Workaround: Google Apps for Business won't automatically add flights to your calendar
-      </a>
-    </h1>
-
-    <span class="post-date">25 May 2015</span>
-
-    <p>My personal gmail account has a great feature where it will automatically add flights to my calendar. It even figures out time zones, which is awesome.</p>
-
-<p><a href="https://support.google.com/calendar/answer/6084018?hl=en" target="_blank">Google Apps for Business doesn’t have this feature</a>, which is a shame. As a workaround, you can forward your flight confirmations from your work email to your personal Gmail account. Just be sure to change the title of the email so it doesn’t have the “Fwd:” prefix, and remove the froward headers from the email body (just select them and hit delete).</p>
-
-<p>Your personal Gmail will now think these are new flight confirmations and add them to your personal calendar! Here’s to hoping Google gets this feature in Google Apps for Business.</p>
 
   </div>
   

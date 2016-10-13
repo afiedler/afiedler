@@ -11,7 +11,7 @@
 
   <title>
     
-      Lodash&#47;Underscore on Google App Script &middot; Andy Fiedler
+      Memory Issues with NodeJS Streams? Remove 0.8.x Streams from Your Pipe &middot; Andy Fiedler
     
   </title>
 
@@ -198,26 +198,36 @@
 
     <div class="content container">
       <div class="post">
-  <h1 class="post-title">Lodash&#47;Underscore on Google App Script</h1>
-  <span class="post-date">12 Mar 2015</span>
-  <p>I’ve recently been working on a Google App Script project, and wanted to use Underscore or Lodash because writing Javascript is relatively painful without those libraries. The problem is that Lodash does a lot of feature detection by trying to throw exceptions, and the Google App Script debugger pauses on all exceptions.</p>
+  <h1 class="post-title">Memory Issues with NodeJS Streams? Remove 0.8.x Streams from Your Pipe</h1>
+  <span class="post-date">13 Oct 2016</span>
+  <p>I was working on an ETL process with NodeJS that ran on Heroku, which limits you to 500MB of
+memory on a standard dyno. The ETL was quickly running out of memory, even through each
+document that it processed was less than 1MB.</p>
 
-<p>The fix is to just modify Lodash slightly to hard-code the Google App Script features that throw exceptions. This isn’t too hard to do, but it is a pain, so I’ve posted my <a title="Lodash modified for Google App Script" href="https://gist.github.com/afiedler/261a20ac4c7e7befc40e" target="_blank">modified version of Lodash as a Gist here</a>.</p>
+<p>This ETL was made up of a <code class="highlighter-rouge">Readable</code> stream from a MongoDB <code class="highlighter-rouge">Cursor</code>, then two <code class="highlighter-rouge">Transform</code>
+streams, one using <a href="https://github.com/dominictarr/event-stream"><code class="highlighter-rouge">event-stream</code></a> and one 
+implemented as a subclass of <code class="highlighter-rouge">Stream.Transform</code>. The last stream was a <code class="highlighter-rouge">Writable</code> stream
+that validated and wrote back documents to MongoDB.</p>
+
+<p>Clearly the readable stream was reading documents out of Mongo way too quickly for the
+transform streams to do their work and the writable stream to write the documents back to
+MongoDB. But wasn’t NodeJS suppose to manage this automatically, assuming the <code class="highlighter-rouge">highWaterMark</code>
+was set to something reasonable?</p>
+
+<p>It turns our that, yes, NodeJS does manage this correctly, as long as <em>every stream in your pipe
+is a 0.10.x stream or greater</em>. NodeJS implemented the 
+<a href="https://nodejs.org/en/blog/feature/streams2/"><code class="highlighter-rouge">highWaterMark</code> in Node 0.10.x</a>.</p>
+
+<p>The culprit in my case was <code class="highlighter-rouge">event-stream</code>, which is an old library that only makes 0.8.x streams.</p>
+
+<p>Moral of the story: if you are having memory issues with streams that seem like backpressure
+should be solving, make sure all of the streams in your pipe are 0.10.x streams or greater!</p>
 
 </div>
 
 <div class="related">
   <h2>Related Posts</h2>
   <ul class="related-posts">
-    
-      <li>
-        <h3>
-          <a href="/2016/10/nodejs-streams-memory-issues-and-backpressure">
-            Memory Issues with NodeJS Streams? Remove 0.8.x Streams from Your Pipe
-            <small>13 Oct 2016</small>
-          </a>
-        </h3>
-      </li>
     
       <li>
         <h3>
@@ -233,6 +243,15 @@
           <a href="/2016/04/a-better-patch-method-for-angulars-ngresource">
             A Better $patch Method for Angular's ngResource
             <small>16 Apr 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2016/04/testing-angular-q-promises">
+            Testing Angular $q Promises
+            <small>12 Apr 2016</small>
           </a>
         </h3>
       </li>

@@ -182,6 +182,10 @@
           
         
       
+        
+          
+        
+      
 
     </nav>
 
@@ -194,6 +198,73 @@
 
     <div class="content container">
       <div class="posts">
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/2015/08/friday-links">
+        Friday Links
+      </a>
+    </h1>
+
+    <span class="post-date">07 Aug 2015</span>
+
+    <ul>
+  <li><strong>Music I’m rocking out to</strong> – <a href="https://open.spotify.com/track/5dCQryKQ6LPT50PBXnZfQy">Two Hearts</a> by The Features and <a href="https://open.spotify.com/track/2sNvitW3TxiTeC9xT9f2ZZ">Firestone</a> by Kygo.</li>
+  <li><strong>Interesting read</strong> – The NYTimes has a <a href="http://www.nytimes.com/2015/08/08/us/politics/fox-news-moderators-bring-a-sharpened-edge-to-gop-debate-stage.html?_r=0">great article</a> praising the Fox News coverage of the Republican debate. I agree with it, the Fox moderators were almost Jon Stewart-esque!</li>
+  <li><strong>Tools and tech</strong> – I’ve been experimenting with different development environments for NodeJS, and the winner so far is JetBrain’s <a href="https://www.jetbrains.com/webstorm/">WebStorm</a>. Code completion support is excellent, and the integrated Node debugger is a huge time saver. At $49, it’s a no-brainer if you do any kind of Javascript development.</li>
+</ul>
+
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/2015/07/google-analytics-with-angularjs-and-ui-router">
+        Google Analytics with AngularJS and UI-Router
+      </a>
+    </h1>
+
+    <span class="post-date">29 Jul 2015</span>
+
+    <p>I helped <a href="http://www.cleanslatedc.com/">Clean Slate DC</a> add Google Analytics to their app last night at <a href="http://codefordc.org">Code For DC</a> and realized others might not know how to do this. It’s pretty simple, but you won’t want to follow the directions on Google Analytics exactly. Instead, add this to your <code class="highlighter-rouge">index.html</code> or main page <code class="highlighter-rouge">&lt;head&gt;</code>, replacing your UA code with the UA code that Google gives you:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c">&lt;!-- Google Analytics --&gt;</span>
+<span class="nt">&lt;script&gt;</span>
+<span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span><span class="nx">s</span><span class="p">,</span><span class="nx">o</span><span class="p">,</span><span class="nx">g</span><span class="p">,</span><span class="nx">r</span><span class="p">,</span><span class="nx">a</span><span class="p">,</span><span class="nx">m</span><span class="p">){</span><span class="nx">i</span><span class="p">[</span><span class="s1">'GoogleAnalyticsObject'</span><span class="p">]</span><span class="o">=</span><span class="nx">r</span><span class="p">;</span><span class="nx">i</span><span class="p">[</span><span class="nx">r</span><span class="p">]</span><span class="o">=</span><span class="nx">i</span><span class="p">[</span><span class="nx">r</span><span class="p">]</span><span class="o">||</span><span class="kd">function</span><span class="p">(){</span>
+<span class="p">(</span><span class="nx">i</span><span class="p">[</span><span class="nx">r</span><span class="p">].</span><span class="nx">q</span><span class="o">=</span><span class="nx">i</span><span class="p">[</span><span class="nx">r</span><span class="p">].</span><span class="nx">q</span><span class="o">||</span><span class="p">[]).</span><span class="nx">push</span><span class="p">(</span><span class="nx">arguments</span><span class="p">)},</span><span class="nx">i</span><span class="p">[</span><span class="nx">r</span><span class="p">].</span><span class="nx">l</span><span class="o">=</span><span class="mi">1</span><span class="o">*</span><span class="k">new</span> <span class="nb">Date</span><span class="p">();</span><span class="nx">a</span><span class="o">=</span><span class="nx">s</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="nx">o</span><span class="p">),</span>
+<span class="nx">m</span><span class="o">=</span><span class="nx">s</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="nx">o</span><span class="p">)[</span><span class="mi">0</span><span class="p">];</span><span class="nx">a</span><span class="p">.</span><span class="nx">async</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="nx">a</span><span class="p">.</span><span class="nx">src</span><span class="o">=</span><span class="nx">g</span><span class="p">;</span><span class="nx">m</span><span class="p">.</span><span class="nx">parentNode</span><span class="p">.</span><span class="nx">insertBefore</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="nx">m</span><span class="p">)</span>
+<span class="p">})(</span><span class="nb">window</span><span class="p">,</span><span class="nb">document</span><span class="p">,</span><span class="s1">'script'</span><span class="p">,</span><span class="s1">'//www.google-analytics.com/analytics.js'</span><span class="p">,</span><span class="s1">'ga'</span><span class="p">);</span>
+<span class="nx">ga</span><span class="p">(</span><span class="s1">'create'</span><span class="p">,</span> <span class="s1">'UA-XXXX-X'</span><span class="p">,</span> <span class="s1">'auto'</span><span class="p">);</span>
+<span class="nt">&lt;/script&gt;</span>
+<span class="c">&lt;!-- End Google Analytics --&gt;</span>
+</code></pre>
+</div>
+
+<p>Next, add a service to your Angular project:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s2">"app"</span><span class="p">).</span><span class="nx">service</span><span class="p">(</span><span class="s1">'Analytics'</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+
+  <span class="k">this</span><span class="p">.</span><span class="nx">recordPageview</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">url</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">ga</span><span class="p">(</span><span class="s1">'set'</span><span class="p">,</span> <span class="s1">'page'</span><span class="p">,</span> <span class="nx">url</span><span class="p">);</span>
+    <span class="nx">ga</span><span class="p">(</span><span class="s1">'send'</span><span class="p">,</span> <span class="s1">'pageview'</span><span class="p">);</span>
+  <span class="p">};</span>
+
+<span class="p">});</span>
+</code></pre>
+</div>
+
+<p>Finally, add a run block near where your app starts:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s2">"app"</span><span class="p">).</span><span class="nx">run</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">$rootScope</span><span class="p">,</span> <span class="nx">$location</span><span class="p">,</span> <span class="nx">Analytics</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">$rootScope</span><span class="p">.</span><span class="nx">$on</span><span class="p">(</span><span class="s1">'$stateChangeSuccess'</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">Analytics</span><span class="p">.</span><span class="nx">recordPageview</span><span class="p">(</span><span class="nx">$location</span><span class="p">.</span><span class="nx">url</span><span class="p">());</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+</code></pre>
+</div>
+
+<p>There you go!</p>
+
+  </div>
   
   <div class="post">
     <h1 class="post-title">
@@ -249,137 +320,6 @@
 <span class="nx">expect</span><span class="p">(</span><span class="nx">responsePojo</span><span class="p">).</span><span class="nx">to</span><span class="p">.</span><span class="nx">deep</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="nx">fixture</span><span class="p">);</span>
 </code></pre>
 </div>
-
-  </div>
-  
-  <div class="post">
-    <h1 class="post-title">
-      <a href="/2015/07/nodejs-and-hapi-for-rails-developers">
-        NodeJS and Hapi for Rails Developers
-      </a>
-    </h1>
-
-    <span class="post-date">22 Jul 2015</span>
-
-    <p>This post is an <strong>work in progress</strong> list of tips and tricks I’ve learned working on a HapiJS API after mostly coding Rails APIs for the last few years. I expect to update it as I learn more.</p>
-
-<p>If you are a Rails developer looking to transition to NodeJS, hopefully this will save you some time. If you are a more seasoned NodeJS or Hapi developer and have suggestions for improving this, please let me know in the comments.</p>
-
-<h2 id="async-programming">Async Programming</h2>
-
-<h3 id="error-first-callbacks-promises-or-asyncawait">Error-first callbacks, promises, or <code class="highlighter-rouge">async</code>/<code class="highlighter-rouge">await</code></h3>
-<p>Most Rails developers have written some Javascript, so you are probably familiar with callbacks. On the client, having nested callbacks is relatively rare. On the server, however, they are far more common. A simple example would be a server method that needs to make a handful of database calls, with all of the depending on the outcome of the others. This would be trivial to write in a sequential way, but with NodeJS, you will need to nest callbacks to accomplish the same thing.</p>
-
-<p>This is both the best thing about NodeJS and the most annoying. It makes things very performant, because with callbacks you continually return control to the main event loop, freeing the main thread to move on to other things. In Rails, unless you are using a threaded server like Puma, waiting on a database call will block the entire process.</p>
-
-<p>All of Node core and most of the libraries use error-first callbacks. If the first argument to the callback function is truthy, then you know the callback has failed with an error. You’ll see a lot of code in NodeJS like this:</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">myCallbackFunction</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">result</span><span class="p">)</span> <span class="p">{</span>
-   <span class="k">if</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="k">return</span> <span class="nx">err</span><span class="p">;</span>
-   <span class="c1">// process the result</span>
-<span class="p">});</span>
-</code></pre>
-</div>
-
-<p>This gets nasty when you have many nested callbacks and has been dubbed “callback hell”.</p>
-
-<p>One way to fix this is to use a promise. You can typically turn any error-first callback function into a promise-returning function with <code class="highlighter-rouge">Promise.promisify()</code>.</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">Promise</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'bluebird'</span><span class="p">);</span> <span class="c1">// bluebird is a popular promise library</span>
-<span class="kd">var</span> <span class="nx">myAsyncFunction</span> <span class="o">=</span> <span class="nx">Promise</span><span class="p">.</span><span class="nx">promisify</span><span class="p">(</span><span class="nx">myCallbackFunction</span><span class="p">);</span>
-
-<span class="nx">myAsyncFunction</span><span class="p">(</span><span class="nx">options</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">result</span><span class="p">)</span> <span class="p">{</span>
-   <span class="c1">// process result</span>
-<span class="p">}).</span><span class="k">catch</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
-   <span class="c1">// process error</span>
-<span class="p">});</span>
-</code></pre>
-</div>
-
-<p>This doesn’t look Earth-shattering, but promises can make deeply nested callbacks more readable. I like promises from my AngularJS programming, but they aren’t widely used in the Node community. If you attempt to use them, you feel like you are fighting an uphill battle since everyone still uses error-first callbacks. They can be vital in some situations, however.</p>
-
-<h4 id="es7-and-asyncawait">ES7 and <code class="highlighter-rouge">async</code>/<code class="highlighter-rouge">await</code></h4>
-<p>The next generation of Javascript will hopefully solve all of our problems with the addition of two new keywords: <code class="highlighter-rouge">async</code> and <code class="highlighter-rouge">await</code>. These use promises under the hood, but you can use <code class="highlighter-rouge">try</code>-<code class="highlighter-rouge">catch</code> and don’t need <code class="highlighter-rouge">then()</code>:</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">try</span> <span class="p">{</span>
-   <span class="kd">var</span> <span class="nx">result</span> <span class="o">=</span> <span class="nx">await</span> <span class="nx">myAsyncFunction</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span>
-   <span class="c1">// process result</span>
-<span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">ex</span><span class="p">)</span> <span class="p">{</span>
-   <span class="c1">// handle error</span>
-<span class="p">}</span>
-</code></pre>
-</div>
-
-<p>You can use this today if you transpile with the Traceur compiler, but not much of the Node community is doing that yet. Once more people get on board, this will be a <em>huge</em> improvement in Javascript.</p>
-
-<h4 id="what-do-do-today">What do do today?</h4>
-<p>Today, I think you should stick with error-first callbacks and use promises if absolutely necessary. Another library you can look into is the <a href="https://github.com/caolan/async"><code class="highlighter-rouge">async</code></a> library, which gives you lots of nice functions to handle many callbacks in series or parallel.</p>
-
-<h2 id="unit-testing">Unit Testing</h2>
-
-<h3 id="npm-packages-to-use">NPM packages to use</h3>
-<ul>
-  <li><a href="https://github.com/hapijs/lab">Lab</a> - Hapi’s unit testing framework. It supports both TestUnit and RSpec style tests. I’m using the RSpec style.</li>
-  <li><a href="https://github.com/hapijs/code">Code</a> - An assertion library. This handles <code class="highlighter-rouge">expect</code> statements. There are a <a href="http://andyfiedler.com/blog/gotchas-with-hapis-code-library-327/">few gotchas</a>.</li>
-</ul>
-
-<h3 id="test-folder-setup">Test folder setup</h3>
-<p>I’m using RSpec style tests, so my folder hierarchy looks like this:</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>+ /
-|
-+---specs
-|
-+---requests
-| |
-| +---users
-| |
-| +---get.js
-|
-+---models
-|
-+---user.js
-</code></pre>
-</div>
-
-<h3 id="running-your-specs">Running your specs</h3>
-<p>To run your specs, you have two choices. You can either install lab globally and run them with the <code class="highlighter-rouge">lab</code> command, or you can change your <code class="highlighter-rouge">package.json</code> file to set what to run for <code class="highlighter-rouge">npm test</code>. I usually do the second options, because it lets me specify some default options for lab. Here’s what the section of <code class="highlighter-rouge">package.json</code> file looks like:</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
-   </span><span class="nt">"scripts"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-      </span><span class="nt">"test"</span><span class="p">:</span><span class="w"> </span><span class="s2">"env $(cat .env | xargs) lab -v -L -m 0"</span><span class="w">
-   </span><span class="p">}</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre>
-</div>
-
-<p>The <code class="highlighter-rouge">xargs</code> part is to set the environmental variables before running the tests from the <code class="highlighter-rouge">.env</code> file. There probably is a better way to do this, but that is working for now.</p>
-
-  </div>
-  
-  <div class="post">
-    <h1 class="post-title">
-      <a href="/2015/07/getting-node-inspector-to-work-with-labhapijs">
-        Getting Node-Inspector to work with Lab&#47;HapiJS
-      </a>
-    </h1>
-
-    <span class="post-date">17 Jul 2015</span>
-
-    <p>Debugging specs with console.log statements is a real pain. Node-Inspector is far better, giving you an environment that is basically the same as Chrome DevTools.</p>
-
-<p>To use it with Lab, add this script to your package.json file:</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="p">{</span>
-  <span class="c1">// other package.json stuff</span>
-  <span class="s2">"scripts"</span><span class="err">:</span> <span class="p">{</span>
-    <span class="s2">"test-debug"</span><span class="err">:</span> <span class="s2">"node-debug ./node_modules/.bin/lab"</span>
-  <span class="p">}</span>
-<span class="p">}</span>
-</code></pre>
-</div>
-
-<p>You can now run all of your specs with <code class="highlighter-rouge">npm run test-debug</code> , or run the specs in just one file with <code class="highlighter-rouge">npm run test-debug &lt;path to your spec file&gt;.js</code>.</p>
 
   </div>
   

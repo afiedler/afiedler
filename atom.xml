@@ -4,13 +4,69 @@
  <title>Andy Fiedler</title>
  <link href="/atom.xml" rel="self"/>
  <link href="/"/>
- <updated>2016-07-28T15:32:43-04:00</updated>
+ <updated>2016-10-13T08:29:35-04:00</updated>
  <id></id>
  <author>
    <name>Andy Fiedler</name>
    <email></email>
  </author>
 
+ 
+ <entry>
+   <title>Memory Issues with NodeJS Streams? Remove 0.8.x Streams from Your Pipe</title>
+   <link href="/2016/10/nodejs-streams-memory-issues-and-backpressure"/>
+   <updated>2016-10-13T00:00:00-04:00</updated>
+   <id>/2016/10/nodejs-streams-memory-issues-and-backpressure</id>
+   <content type="html">&lt;p&gt;I was working on an ETL process with NodeJS that ran on Heroku, which limits you to 500MB of
+memory on a standard dyno. The ETL was quickly running out of memory, even through each
+document that it processed was less than 1MB.&lt;/p&gt;
+
+&lt;p&gt;This ETL was made up of a &lt;code class=&quot;highlighter-rouge&quot;&gt;Readable&lt;/code&gt; stream from a MongoDB &lt;code class=&quot;highlighter-rouge&quot;&gt;Cursor&lt;/code&gt;, then two &lt;code class=&quot;highlighter-rouge&quot;&gt;Transform&lt;/code&gt;
+streams, one using &lt;a href=&quot;https://github.com/dominictarr/event-stream&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;event-stream&lt;/code&gt;&lt;/a&gt; and one 
+implemented as a subclass of &lt;code class=&quot;highlighter-rouge&quot;&gt;Stream.Transform&lt;/code&gt;. The last stream was a &lt;code class=&quot;highlighter-rouge&quot;&gt;Writable&lt;/code&gt; stream
+that validated and wrote back documents to MongoDB.&lt;/p&gt;
+
+&lt;p&gt;Clearly the readable stream was reading documents out of Mongo way too quickly for the
+transform streams to do their work and the writable stream to write the documents back to
+MongoDB. But wasn’t NodeJS suppose to manage this automatically, assuming the &lt;code class=&quot;highlighter-rouge&quot;&gt;highWaterMark&lt;/code&gt;
+was set to something reasonable?&lt;/p&gt;
+
+&lt;p&gt;It turns our that, yes, NodeJS does manage this correctly, as long as &lt;em&gt;every stream in your pipe
+is a 0.10.x stream or greater&lt;/em&gt;. NodeJS implemented the 
+&lt;a href=&quot;https://nodejs.org/en/blog/feature/streams2/&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;highWaterMark&lt;/code&gt; in Node 0.10.x&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;The culprit in my case was &lt;code class=&quot;highlighter-rouge&quot;&gt;event-stream&lt;/code&gt;, which is an old library that only makes 0.8.x streams.&lt;/p&gt;
+
+&lt;p&gt;Moral of the story: if you are having memory issues with streams that seem like backpressure
+should be solving, make sure all of the streams in your pipe are 0.10.x streams or greater!&lt;/p&gt;
+</content>
+ </entry>
+ 
+ <entry>
+   <title>Learning React as an AngularJS Developer</title>
+   <link href="/2016/08/learning-react-as-an-angular-js-developer"/>
+   <updated>2016-08-18T00:00:00-04:00</updated>
+   <id>/2016/08/learning-react-as-an-angular-js-developer</id>
+   <content type="html">&lt;h2 id=&quot;react-isnt-a-framework&quot;&gt;React isn’t a framework&lt;/h2&gt;
+
+&lt;p&gt;You use Angular, so you probably like frameworks. React and redux are &lt;em&gt;not&lt;/em&gt; frameworks in the same sense as Angular. You can use &lt;a href=&quot;https://github.com/davezuko/react-redux-starter-kit&quot;&gt;React Redux Starter Kit&lt;/a&gt; and/or &lt;a href=&quot;https://github.com/SpencerCDixon/redux-cli&quot;&gt;Redux CLI&lt;/a&gt; to get a React/Redux app set up with some sensible defaults, though.&lt;/p&gt;
+
+&lt;h3 id=&quot;replacements-for-other-parts-of-angular&quot;&gt;Replacements for other parts of Angular&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;$http&lt;/code&gt; – &lt;a href=&quot;https://github.com/mzabriskie/axios&quot;&gt;axios&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;Factories and services – ES6 modules with Webpack&lt;/li&gt;
+  &lt;li&gt;Mocking modules (or in Angular, services or factories) in your tests – &lt;a href=&quot;https://github.com/speedskater/babel-plugin-rewire&quot;&gt;babel-plugin-rewire&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;understand-the-component-lifecycle-methods&quot;&gt;Understand the component lifecycle methods&lt;/h2&gt;
+
+&lt;p&gt;Best resource I’ve found is &lt;a href=&quot;http://busypeoples.github.io/post/react-component-lifecycle/&quot;&gt;Understanding the React Component Lifecycle&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;get-a-good-authentication-library&quot;&gt;Get a good authentication library&lt;/h2&gt;
+
+&lt;p&gt;I recommend &lt;a href=&quot;redux-auth-wrapper&quot;&gt;redux-auth-wrapper&lt;/a&gt;.&lt;/p&gt;
+</content>
+ </entry>
  
  <entry>
    <title>A Better $patch Method for Angular's ngResource</title>
@@ -104,7 +160,7 @@
 
    &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;setFieldByPath&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;obj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
       &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;paths&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;split&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;.&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-      &lt;span class=&quot;nx&quot;&gt;vat&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;setOn&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;obj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+      &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;setOn&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;obj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 
       &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;paths&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;length&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
          &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;path&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;paths&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;

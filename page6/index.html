@@ -182,6 +182,10 @@
           
         
       
+        
+          
+        
+      
 
     </nav>
 
@@ -194,6 +198,42 @@
 
     <div class="content container">
       <div class="posts">
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/2015/06/quick-tip-fixing-postgres-operator-class-gin_trgm_ops-does-not-exist-for-access-method-gin">
+        Quick Tip: Fixing Postgres operator class "gin_trgm_ops" does not exist for access method "gin"
+      </a>
+    </h1>
+
+    <span class="post-date">17 Jun 2015</span>
+
+    <p>This error can show up when you are trying to load a schema into a new database in Postgres that has been dumped from a database with the pg_trgm extension. You can fix it by adding the extension to the template database (template1) so that when you create a new database, it is already there, ready to go.</p>
+
+<p>To do this, run this at the command line:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>psql -d template1 -c 'create extension pg_trgm;'
+</code></pre>
+</div>
+
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/2015/05/workaround-google-apps-for-business-wont-automatically-add-flights-to-your-calendar">
+        Workaround: Google Apps for Business won't automatically add flights to your calendar
+      </a>
+    </h1>
+
+    <span class="post-date">25 May 2015</span>
+
+    <p>My personal gmail account has a great feature where it will automatically add flights to my calendar. It even figures out time zones, which is awesome.</p>
+
+<p><a href="https://support.google.com/calendar/answer/6084018?hl=en" target="_blank">Google Apps for Business doesn’t have this feature</a>, which is a shame. As a workaround, you can forward your flight confirmations from your work email to your personal Gmail account. Just be sure to change the title of the email so it doesn’t have the “Fwd:” prefix, and remove the froward headers from the email body (just select them and hit delete).</p>
+
+<p>Your personal Gmail will now think these are new flight confirmations and add them to your personal calendar! Here’s to hoping Google gets this feature in Google Apps for Business.</p>
+
+  </div>
   
   <div class="post">
     <h1 class="post-title">
@@ -244,31 +284,6 @@
     <h1 class="post-title">
       <a href="/2015/05/twitter">
         Twitter
-      </a>
-    </h1>
-
-    <span class="post-date">08 May 2015</span>
-
-    
-  </div>
-  
-  <div class="post">
-    <h1 class="post-title">
-      <a href="/2015/05/linkedin">
-        LinkedIn
-      </a>
-    </h1>
-
-    <span class="post-date">08 May 2015</span>
-
-    
-
-  </div>
-  
-  <div class="post">
-    <h1 class="post-title">
-      <a href="/2015/05/linkedin">
-        LinkedIn
       </a>
     </h1>
 

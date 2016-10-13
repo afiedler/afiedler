@@ -182,6 +182,10 @@
           
         
       
+        
+          
+        
+      
 
     </nav>
 
@@ -194,6 +198,53 @@
 
     <div class="content container">
       <div class="posts">
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/2016/03/draft-js-data-model-demo">
+        Draft.js Data Model Demo
+      </a>
+    </h1>
+
+    <span class="post-date">11 Mar 2016</span>
+
+    <p>Facebook released a very interesting <a href="https://facebook.github.io/draft-js/">React-based rich text editor called Draft.js</a>. The advantage of something like is that you have much more control over the data model for structured documents.</p>
+
+<p>The documentation is a little sparse on examples of what the underlying data model looks like, so I build this quick demo that renders the data model in JSON.</p>
+
+<p><a href="http://afiedler.github.io/draft-js-dm-demo/">See it live here</a>.</p>
+
+<picture>
+    <source srcset="/generated/wp/uploads/2016/03/Screen-Shot-2016-03-11-at-12.43.01-PM-1050by559-e3eae6.png" media="(min-width: 40em) and (-webkit-min-device-pixel-ratio: 1.5), (min-width: 40em) and (min-resolution: 144dpi)" />
+    <source srcset="/generated/wp/uploads/2016/03/Screen-Shot-2016-03-11-at-12.43.01-PM-700by373-e3eae6.png" media="(min-width: 40em)" />
+    <source srcset="/generated/wp/uploads/2016/03/Screen-Shot-2016-03-11-at-12.43.01-PM-675by360-e3eae6.png" media="(min-width: 30em) and (-webkit-min-device-pixel-ratio: 1.5), (min-width: 30em) and (min-resolution: 144dpi)" />
+    <source srcset="/generated/wp/uploads/2016/03/Screen-Shot-2016-03-11-at-12.43.01-PM-450by240-e3eae6.png" media="(min-width: 30em)" />
+    <source srcset="/generated/wp/uploads/2016/03/Screen-Shot-2016-03-11-at-12.43.01-PM-525by300-e3eae6.png" media="(-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 144dpi)" />
+    <source srcset="/generated/wp/uploads/2016/03/Screen-Shot-2016-03-11-at-12.43.01-PM-350by200-e3eae6.png" />
+    <img src="/generated/wp/uploads/2016/03/Screen-Shot-2016-03-11-at-12.43.01-PM-350by200-e3eae6.png" class="blog-full" itemprop="image" />
+  </picture>
+
+
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/2016/02/getting-jetbrains-datagrip-to-work-with-heroku-postgres">
+        Getting Jetbrains DataGrip to work with Heroku Postgres
+      </a>
+    </h1>
+
+    <span class="post-date">11 Feb 2016</span>
+
+    <p>Heroku Postgres forces you to use SSL, but the connection isn’t signed with a well-known CA. To get this to work in DataGrip, you have to mess around with some JDBC settings. Here’s how to do it:</p>
+
+<p>In the add connections dialog, enter the username, password, hostname, port, and database name. You’ll have to enter these manually, because DataGrip’s URL support only works with JDBC database URLs, not the more common Postgres URLs used by Heroku.</p>
+
+<p>Next, click on the Advanced tab. Then find the <code class="highlighter-rouge">ssl</code> property and set it to <code class="highlighter-rouge">true</code>. Then find the <code class="highlighter-rouge">sslfactory</code> property and set it to <code class="highlighter-rouge">org.postgresql.ssl.NonValidatingFactory</code>.</p>
+
+<p>You should be good to go!</p>
+
+  </div>
   
   <div class="post">
     <h1 class="post-title">
@@ -503,43 +554,6 @@ let MyClass = BaseClass.extend({
   </picture>
 
 <p>To check out how I made this, see this <a href="https://gist.github.com/afiedler/6e498d2981ea7b788b61">IPython notebook</a>. This is using Jupyter and Python 3, with data recorded using <a href="https://github.com/afiedler/node-thinkgear-sockets">node-thinkgear-sockets</a>.</p>
-
-  </div>
-  
-  <div class="post">
-    <h1 class="post-title">
-      <a href="/2015/12/the-sketch-file-format">
-        How to Parse Sketch Files with NodeJS
-      </a>
-    </h1>
-
-    <span class="post-date">11 Dec 2015</span>
-
-    <p>I’ve recently been working more with <a href="https://www.sketchapp.com/">Sketch</a>, and wanted to see if I could get Sketch files to render on Linux. Turns out that no one has released open-source software to parse or open Sketch files yet, so I decided to see how hard it would be to parse them with NodeJS.</p>
-
-<p>Here’s the results of my efforts: <a href="https://github.com/afiedler/sketch-node-parser">Github Project</a></p>
-
-<p>This needs more work to make it usable, but Sketch files aren’t too difficult to deal with.</p>
-
-  </div>
-  
-  <div class="post">
-    <h1 class="post-title">
-      <a href="/2015/12/two-resources-to-learn-about-copywriting">
-        Two Resources to Learn About Copywriting
-      </a>
-    </h1>
-
-    <span class="post-date">07 Dec 2015</span>
-
-    <ol>
-  <li>
-    <p>The <a href="https://www.google.com/design/spec/style/writing.html">Google Material Design Guidelines for Writing</a>. The whole Material Design style guide is a good read to learn about UX, but the writing section is excellent to learn about writing clear, concise copy for user interface.</p>
-  </li>
-  <li>
-    <p><a href="http://www.canadaone.com/ezine/feb02/advertising_copy.html">Key Questions to Ask Before Writing &amp; Before Testing Advertising Copy</a>. This article has an excellent description of the difference between inductive and deductive writing strategies. When technical experts write, they typically do so in a deductive way, leading the reader through a logic argument that culminates in the conclusion. That might not work well for advertising copy, and this article explains why.</p>
-  </li>
-</ol>
 
   </div>
   

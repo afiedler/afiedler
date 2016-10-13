@@ -182,6 +182,10 @@
           
         
       
+        
+          
+        
+      
 
     </nav>
 
@@ -194,6 +198,70 @@
 
     <div class="content container">
       <div class="posts">
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/2016/10/nodejs-streams-memory-issues-and-backpressure">
+        Memory Issues with NodeJS Streams? Remove 0.8.x Streams from Your Pipe
+      </a>
+    </h1>
+
+    <span class="post-date">13 Oct 2016</span>
+
+    <p>I was working on an ETL process with NodeJS that ran on Heroku, which limits you to 500MB of
+memory on a standard dyno. The ETL was quickly running out of memory, even through each
+document that it processed was less than 1MB.</p>
+
+<p>This ETL was made up of a <code class="highlighter-rouge">Readable</code> stream from a MongoDB <code class="highlighter-rouge">Cursor</code>, then two <code class="highlighter-rouge">Transform</code>
+streams, one using <a href="https://github.com/dominictarr/event-stream"><code class="highlighter-rouge">event-stream</code></a> and one 
+implemented as a subclass of <code class="highlighter-rouge">Stream.Transform</code>. The last stream was a <code class="highlighter-rouge">Writable</code> stream
+that validated and wrote back documents to MongoDB.</p>
+
+<p>Clearly the readable stream was reading documents out of Mongo way too quickly for the
+transform streams to do their work and the writable stream to write the documents back to
+MongoDB. But wasn’t NodeJS suppose to manage this automatically, assuming the <code class="highlighter-rouge">highWaterMark</code>
+was set to something reasonable?</p>
+
+<p>It turns our that, yes, NodeJS does manage this correctly, as long as <em>every stream in your pipe
+is a 0.10.x stream or greater</em>. NodeJS implemented the 
+<a href="https://nodejs.org/en/blog/feature/streams2/"><code class="highlighter-rouge">highWaterMark</code> in Node 0.10.x</a>.</p>
+
+<p>The culprit in my case was <code class="highlighter-rouge">event-stream</code>, which is an old library that only makes 0.8.x streams.</p>
+
+<p>Moral of the story: if you are having memory issues with streams that seem like backpressure
+should be solving, make sure all of the streams in your pipe are 0.10.x streams or greater!</p>
+
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/2016/08/learning-react-as-an-angular-js-developer">
+        Learning React as an AngularJS Developer
+      </a>
+    </h1>
+
+    <span class="post-date">18 Aug 2016</span>
+
+    <h2 id="react-isnt-a-framework">React isn’t a framework</h2>
+
+<p>You use Angular, so you probably like frameworks. React and redux are <em>not</em> frameworks in the same sense as Angular. You can use <a href="https://github.com/davezuko/react-redux-starter-kit">React Redux Starter Kit</a> and/or <a href="https://github.com/SpencerCDixon/redux-cli">Redux CLI</a> to get a React/Redux app set up with some sensible defaults, though.</p>
+
+<h3 id="replacements-for-other-parts-of-angular">Replacements for other parts of Angular</h3>
+<ul>
+  <li><code class="highlighter-rouge">$http</code> – <a href="https://github.com/mzabriskie/axios">axios</a></li>
+  <li>Factories and services – ES6 modules with Webpack</li>
+  <li>Mocking modules (or in Angular, services or factories) in your tests – <a href="https://github.com/speedskater/babel-plugin-rewire">babel-plugin-rewire</a></li>
+</ul>
+
+<h2 id="understand-the-component-lifecycle-methods">Understand the component lifecycle methods</h2>
+
+<p>Best resource I’ve found is <a href="http://busypeoples.github.io/post/react-component-lifecycle/">Understanding the React Component Lifecycle</a></p>
+
+<h2 id="get-a-good-authentication-library">Get a good authentication library</h2>
+
+<p>I recommend <a href="redux-auth-wrapper">redux-auth-wrapper</a>.</p>
+
+  </div>
   
   <div class="post">
     <h1 class="post-title">
@@ -291,7 +359,7 @@
 
    <span class="kd">function</span> <span class="nx">setFieldByPath</span><span class="p">(</span><span class="nx">obj</span><span class="p">,</span> <span class="nx">path</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
       <span class="kd">var</span> <span class="nx">paths</span> <span class="o">=</span> <span class="nx">path</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s1">'.'</span><span class="p">);</span>
-      <span class="nx">vat</span> <span class="nx">setOn</span> <span class="o">=</span> <span class="nx">obj</span><span class="p">;</span>
+      <span class="kd">var</span> <span class="nx">setOn</span> <span class="o">=</span> <span class="nx">obj</span><span class="p">;</span>
 
       <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">paths</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
          <span class="kd">var</span> <span class="nx">path</span> <span class="o">=</span> <span class="nx">paths</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
@@ -400,53 +468,6 @@ SELECT * FROM my_table;
 <p>Now you have <code class="highlighter-rouge">result</code>, which is a Pandas DataFrame. Happy data exploration!</p>
 
 <p><strong>Note:</strong> It probably goes without saying this is a <strong>bad idea</strong> to do on a production system. You should use a read-only replica for running queries in production, or use a dump of the database loaded onto another server.</p>
-
-  </div>
-  
-  <div class="post">
-    <h1 class="post-title">
-      <a href="/2016/03/draft-js-data-model-demo">
-        Draft.js Data Model Demo
-      </a>
-    </h1>
-
-    <span class="post-date">11 Mar 2016</span>
-
-    <p>Facebook released a very interesting <a href="https://facebook.github.io/draft-js/">React-based rich text editor called Draft.js</a>. The advantage of something like is that you have much more control over the data model for structured documents.</p>
-
-<p>The documentation is a little sparse on examples of what the underlying data model looks like, so I build this quick demo that renders the data model in JSON.</p>
-
-<p><a href="http://afiedler.github.io/draft-js-dm-demo/">See it live here</a>.</p>
-
-<picture>
-    <source srcset="/generated/wp/uploads/2016/03/Screen-Shot-2016-03-11-at-12.43.01-PM-1050by559-e3eae6.png" media="(min-width: 40em) and (-webkit-min-device-pixel-ratio: 1.5), (min-width: 40em) and (min-resolution: 144dpi)" />
-    <source srcset="/generated/wp/uploads/2016/03/Screen-Shot-2016-03-11-at-12.43.01-PM-700by373-e3eae6.png" media="(min-width: 40em)" />
-    <source srcset="/generated/wp/uploads/2016/03/Screen-Shot-2016-03-11-at-12.43.01-PM-675by360-e3eae6.png" media="(min-width: 30em) and (-webkit-min-device-pixel-ratio: 1.5), (min-width: 30em) and (min-resolution: 144dpi)" />
-    <source srcset="/generated/wp/uploads/2016/03/Screen-Shot-2016-03-11-at-12.43.01-PM-450by240-e3eae6.png" media="(min-width: 30em)" />
-    <source srcset="/generated/wp/uploads/2016/03/Screen-Shot-2016-03-11-at-12.43.01-PM-525by300-e3eae6.png" media="(-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 144dpi)" />
-    <source srcset="/generated/wp/uploads/2016/03/Screen-Shot-2016-03-11-at-12.43.01-PM-350by200-e3eae6.png" />
-    <img src="/generated/wp/uploads/2016/03/Screen-Shot-2016-03-11-at-12.43.01-PM-350by200-e3eae6.png" class="blog-full" itemprop="image" />
-  </picture>
-
-
-  </div>
-  
-  <div class="post">
-    <h1 class="post-title">
-      <a href="/2016/02/getting-jetbrains-datagrip-to-work-with-heroku-postgres">
-        Getting Jetbrains DataGrip to work with Heroku Postgres
-      </a>
-    </h1>
-
-    <span class="post-date">11 Feb 2016</span>
-
-    <p>Heroku Postgres forces you to use SSL, but the connection isn’t signed with a well-known CA. To get this to work in DataGrip, you have to mess around with some JDBC settings. Here’s how to do it:</p>
-
-<p>In the add connections dialog, enter the username, password, hostname, port, and database name. You’ll have to enter these manually, because DataGrip’s URL support only works with JDBC database URLs, not the more common Postgres URLs used by Heroku.</p>
-
-<p>Next, click on the Advanced tab. Then find the <code class="highlighter-rouge">ssl</code> property and set it to <code class="highlighter-rouge">true</code>. Then find the <code class="highlighter-rouge">sslfactory</code> property and set it to <code class="highlighter-rouge">org.postgresql.ssl.NonValidatingFactory</code>.</p>
-
-<p>You should be good to go!</p>
 
   </div>
   
